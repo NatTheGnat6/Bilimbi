@@ -23,6 +23,8 @@ public class Board : MonoBehaviour
     private string word;
     private char lastLetter;
     public char LastLetter => lastLetter;
+    public bool isWordleSolved { get; private set; } = false;
+
 
     [Header("Tiles")]
     public Tile.State emptyState;
@@ -193,6 +195,7 @@ public class Board : MonoBehaviour
             }
         }
 
+        isWordleSolved = true;
         return true;
     }
 
