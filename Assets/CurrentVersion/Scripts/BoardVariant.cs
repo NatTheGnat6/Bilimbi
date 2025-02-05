@@ -4,7 +4,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-1)]
 public class ScrabbleBoard : MonoBehaviour
 {
-    public Board board;
+    public Board wordleBoard;
     private static readonly KeyCode[] SUPPORTED_KEYS = new KeyCode[] {
         KeyCode.A, KeyCode.B, KeyCode.C, KeyCode.D, KeyCode.E, KeyCode.F,
         KeyCode.G, KeyCode.H, KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L,
@@ -23,6 +23,7 @@ public class ScrabbleBoard : MonoBehaviour
     private string sword;
     private char finalLetter;
     private bool wordleSolved;
+    private bool canAcceptInput = false;
 
     [Header("Vtiles")]
     public TileVariant.State emptyState;
@@ -60,21 +61,19 @@ public class ScrabbleBoard : MonoBehaviour
     {
         ClearBoard();
         wordleSolved = false;
-        enabled = false;
+        canAcceptInput = false;
     }
 
     public void TryAgain()
     {
         ClearBoard();
-
         enabled = true;
     }
 
-
     private void Update()
     {
-        if (!wordleSolved) return;
-        
+        if (!wordleBoard.isWordleSolved) return;
+
         RowVariant currentRow = vrows[vrowIndex];
 
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -107,42 +106,35 @@ public class ScrabbleBoard : MonoBehaviour
 
     private void SubmitRow(RowVariant vrow)
     {
-        // string enteredSWord = new string(vrow.Vtiles.Select(vtile => vtile.letter).ToArray()).ToLower();
-        // if (!validScrabbleWords.Contains(enteredSWord) || enteredSWord[0] != board.LastLetter)
-        // {
-        //     invalidWordText.SetActive(true);
-        //     return;
-        // }
+        string enteredSWord = new string(vrow.Vtiles.Select(vtile => vtile.letter).ToArray()).ToLower();
+        if (!validScrabbleWords.Contains(enteredSWord) || enteredSWord[0] != wordleBoard.LastLetter)
+        {
+            invalidWordText.SetActive(true);
+            return;
+        }
         
-        // foreach (var vtile in vrow.Vtiles)
-        // {
-        //     vtile.SetState(validScrabbleWordState);
-        // }
+        foreach (var vtile in vrow.Vtiles)
+        {
+            vtile.SetState(validScrabbleWordState);
+        }
 
-        // finalLetter = enteredSWord.Last();
-        // board.SetLastLetter(finalLetter);
+        finalLetter = enteredSWord.Last();
+        wordleBoard.SetLastLetter(finalLetter);
     }
 
     private bool IsValidWord(string sword)
     {
-        for (int i = 0; i < validScrabbleWords.Length; i++)
-        {
-            if (string.Equals(sword, validScrabbleWords[i], System.StringComparison.OrdinalIgnoreCase)) {
-                return true;
-            }
-        }
-
-        return false;
+        return validScrabbleWords.Contains(sword, System.StringComparer.OrdinalIgnoreCase);
     }
 
     private void ClearBoard()
     {
-        for (int vrow = 0; vrow < vrows.Length; vrow++)
+        foreach (RowVariant vrow in vrows)
         {
-            for (int col = 0; col < vrows[vrow].Vtiles.Length; col++)
+            foreach (TileVariant vtile in vrow.Vtiles)
             {
-                vrows[vrow].Vtiles[col].SetLetter('\0');
-                vrows[vrow].Vtiles[col].SetState(emptyState);
+                vtile.SetLetter('\0');
+                vtile.SetState(emptyState);
             }
         }
 
