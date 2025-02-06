@@ -40,6 +40,8 @@ public class Board : MonoBehaviour
     public string word { get; private set; }
     private char lastLetter;
     public char LastLetter => lastLetter;
+    private Title titleReference;
+    public bool IsRegularGame => titleReference != null && titleReference.IsRegularGame;
 
     [Header("Tiles")]
     public Tile.State emptyState;
@@ -57,6 +59,7 @@ public class Board : MonoBehaviour
     private void Awake()
     {
         rows = GetComponentsInChildren<Row>();
+        titleReference = FindAnyObjectByType<Title>();
     }
 
     public void LoadData()
@@ -84,6 +87,7 @@ public class Board : MonoBehaviour
         if (rows != null) {
             for (int i = 0; i < rows.Length; i++) {
                 if (rows[i] != null) {
+                     if (IsRegularGame) { AudioManager.instance.PlayButtonSound(); }
                     Destroy(rows[i].gameObject);
                 }
             }
@@ -271,6 +275,21 @@ public class Board : MonoBehaviour
             }
             continuationRow = row;
         } else {
+            if (rowIndex >= rows.Length)
+            {
+                if (IsRegularGame)
+                {
+                    AudioManager.instance.PlayLose();
+                }
+                OnCompleted?.Invoke();
+            }
+            else
+            {
+                if (IsRegularGame)
+                {
+                    AudioManager.instance.PlayWrongGuess();
+                }
+            }
             rowIndex++;
             columnIndex = 0;
             columnLockIndex = -1;
@@ -297,6 +316,10 @@ public class Board : MonoBehaviour
         if (row.tiles.All(tile => tile.state == correctState))
         {
             isWordleSolved = true;
+            if (IsRegularGame)
+            {
+                AudioManager.instance.PlayWin();
+            }
             return true;
         }
         return false;

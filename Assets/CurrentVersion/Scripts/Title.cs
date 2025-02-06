@@ -26,6 +26,8 @@ public class Title : MonoBehaviour
     private Board currentBoard;
     private bool gameActive = false;
     private bool initialStarted = false;
+    private bool isRegularGame = false;
+    public bool IsRegularGame => isRegularGame;
 
     public void Start() {
         ToTitleScreen();
@@ -34,6 +36,7 @@ public class Title : MonoBehaviour
     private void BeginGame(Board board, bool maintainPreviousWord = false) {
         if (!gameActive && currentBoard == null) {
             gameActive = true;
+            isRegularGame = true;
             startButtonText.text = "Continue";
             currentBoard = board;
             board.GenerateRows();
@@ -59,6 +62,7 @@ public class Title : MonoBehaviour
             currentBoard.OnCompleted -= StopGame;
             currentBoard = null;
             gameActive = false;
+            isRegularGame = false;
         }
     }
 
