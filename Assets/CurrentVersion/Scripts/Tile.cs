@@ -45,8 +45,5 @@ public class Tile : MonoBehaviour
         SetState(state);
     }
 
-    private Color GetAlphaAppliedColor(Color color)
-    {
-        return new Color(color.r, color.g, color.b, alpha);
-    }
+    private Color GetAlphaAppliedColor(Color color) => Helper.AlphaifyColor(color, alpha);
 }

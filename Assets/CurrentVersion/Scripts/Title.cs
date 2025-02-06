@@ -22,7 +22,6 @@ public class Title : MonoBehaviour
     public Canvas newWordleScreen;
     public Component homeButton;
     public TMP_Text startButtonText;
-    public Button newWordleButton;
     public Board initialBoard;
     private Board currentBoard;
     private bool gameActive = false;

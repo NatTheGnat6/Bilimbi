@@ -46,9 +46,7 @@ public class Row : MonoBehaviour
         }
     }
 
-    private float DisappearEasingFunction(float alpha) {
-        return alpha * alpha * alpha;
-    }
+    private float DisappearEasingFunction(float alpha) => Helper.CubicEase(alpha);
 
     public void Disappear(int delay)
     {
