@@ -61,19 +61,22 @@ public class ScrabbleBoard : MonoBehaviour
     {
         ClearBoard();
         wordleSolved = false;
-        canAcceptInput = false;
+        enabled = false;
     }
 
     public void TryAgain()
     {
         ClearBoard();
+
         enabled = true;
+        canAcceptInput = false;
     }
+
 
     private void Update()
     {
         if (!wordleBoard.isWordleSolved) return;
-
+        
         RowVariant currentRow = vrows[vrowIndex];
 
         if (Input.GetKeyDown(KeyCode.Backspace))
@@ -112,7 +115,7 @@ public class ScrabbleBoard : MonoBehaviour
             invalidWordText.SetActive(true);
             return;
         }
-        
+
         foreach (var vtile in vrow.Vtiles)
         {
             vtile.SetState(validScrabbleWordState);
@@ -124,17 +127,24 @@ public class ScrabbleBoard : MonoBehaviour
 
     private bool IsValidWord(string sword)
     {
-        return validScrabbleWords.Contains(sword, System.StringComparer.OrdinalIgnoreCase);
+        for (int i = 0; i < validScrabbleWords.Length; i++)
+        {
+            if (string.Equals(sword, validScrabbleWords[i], System.StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private void ClearBoard()
     {
-        foreach (RowVariant vrow in vrows)
+        for (int vrow = 0; vrow < vrows.Length; vrow++)
         {
-            foreach (TileVariant vtile in vrow.Vtiles)
+            for (int col = 0; col < vrows[vrow].Vtiles.Length; col++)
             {
-                vtile.SetLetter('\0');
-                vtile.SetState(emptyState);
+                vrows[vrow].Vtiles[col].SetLetter('\0');
+                vrows[vrow].Vtiles[col].SetState(emptyState);
             }
         }
 

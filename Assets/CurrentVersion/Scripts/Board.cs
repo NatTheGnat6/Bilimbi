@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public delegate void BoardCompleted();
 
@@ -25,6 +26,8 @@ public class Board : MonoBehaviour
     public Component rowPrefab;
     public Component tileColumnPrefab;
     public Component tilePrefab;
+    public bool isWordleSolved { get; private set; } = false;
+
     private int rowIndex;
     private int columnIndex;
     private int columnLockIndex = -1;
@@ -35,6 +38,8 @@ public class Board : MonoBehaviour
     private string[] solutions;
     private string[] validWords;
     public string word { get; private set; }
+    private char lastLetter;
+    public char LastLetter => lastLetter;
 
     [Header("Tiles")]
     public Tile.State emptyState;
@@ -97,6 +102,7 @@ public class Board : MonoBehaviour
         }
         word = solutions[Random.Range(0, solutions.Length)];
         word = word.ToLower().Trim();
+        lastLetter = word.Last();
     }
 
     private void Update()
@@ -288,14 +294,12 @@ public class Board : MonoBehaviour
 
     private bool HasWonWordle(Row row)
     {
-        for (int i = 0; i < row.tiles.Length; i++)
+        if (row.tiles.All(tile => tile.state == correctState))
         {
-            if (row.tiles[i].state != correctState) {
-                return false;
-            }
+            isWordleSolved = true;
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     private void OnEnable()
@@ -308,5 +312,10 @@ public class Board : MonoBehaviour
     {
         tryAgainButton.SetActive(true);
         newWordButton.SetActive(true);
+    }
+
+    public void SetLastLetter(char letter)
+    {
+        lastLetter = letter;
     }
 }
