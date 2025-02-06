@@ -5974,7 +5974,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a35aa512bedcc4ba520362261f0da4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctGuessSound: {fileID: 0}
   wrongGuessSound: {fileID: 2011566711}
   winSound: {fileID: 2011566712}
   loseSound: {fileID: 2011566716}
@@ -6284,7 +6283,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 9.999874}
+  m_AnchoredPosition: {x: 0, y: 9.999878}
   m_SizeDelta: {x: -0.3682251, y: -150.31244}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2137118347
@@ -6310,29 +6309,33 @@ MonoBehaviour:
   m_text: 'Credits
 
 
-    The Team:
-
     Ben Reinherz
 
     Morgan Acevedo
 
-    Natalie
-    Essig
+    Natalie Essig
 
 
-    Support:
-
-    Professor Walt Yarbrough
+    Professor
+    Walt Yarbrough
 
     PLA Casey Costa
 
 
-    IMGD
-    1001
+    Resources:
 
-    Worcester Polytechnic Institute
+    IMGD 1001
 
-    https://zigurous.com/tutorials/wordle'
+    Worcester
+    Polytechnic Institute
+
+    https://zigurous.com/tutorials/wordle
+
+    "Sci-Fi
+    Drone Ambience" by TaranP (Freesound)
+
+    "Video Game SFX Positive Action" 
+    by djlprojects (Freesound)'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
