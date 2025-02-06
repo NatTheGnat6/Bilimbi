@@ -79,6 +79,7 @@ public class Title : MonoBehaviour
     }
 
     public void ToGameScreen() {
+        AudioManager.instance.PlayButtonSound();
         if (!initialStarted) {
             initialStarted = true;
             StartGame(initialBoard);
@@ -87,14 +88,17 @@ public class Title : MonoBehaviour
     }
 
     public void ToCreditsScreen() {
+        AudioManager.instance.PlayButtonSound();
         SwitchScreens(ScreenType.Credits);
     }
 
     public void ToVersionNotesScreen() {
+        AudioManager.instance.PlayButtonSound();
         SwitchScreens(ScreenType.VersionNotes);
     }
     
     public void ToNewWordleScreen() {
+        AudioManager.instance.PlayButtonSound();
         SwitchScreens(ScreenType.NewWordle);
     }
 
