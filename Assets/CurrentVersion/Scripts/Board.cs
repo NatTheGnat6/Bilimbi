@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Threading;
@@ -35,10 +34,7 @@ public class Board : MonoBehaviour
     
     private string[] solutions;
     private string[] validWords;
-    private string word;
-    private char lastLetter;
-    public char LastLetter => lastLetter;
-    public bool isWordleSolved { get; private set; } = false;
+    public string word { get; private set; }
 
     [Header("Tiles")]
     public Tile.State emptyState;
@@ -57,14 +53,8 @@ public class Board : MonoBehaviour
     {
         rows = GetComponentsInChildren<Row>();
     }
-    
-    private void Start()
-    {
-        LoadData();
-        NewGame();
-    }
 
-    private void LoadData()
+    public void LoadData()
     {
         TextAsset textFile = Resources.Load("official_wordle_common") as TextAsset;
         solutions = textFile.text.Split(SEPARATOR, System.StringSplitOptions.None);
@@ -73,32 +63,88 @@ public class Board : MonoBehaviour
         validWords = textFile.text.Split(SEPARATOR, System.StringSplitOptions.None);
     }
 
-    public void NewGame()
-    {
+    public void GenerateRows() {
         ClearBoard();
-        SetRandomWord();
-
-        enabled = true;
+        rows = new Row[6];
+        for (int i = 0; i < 6; i++) {
+            Component rowComponent = Instantiate(rowPrefab, transform);
+            rowComponent.name = i.ToString();
+            Row row = rowComponent.GetComponent<Row>();
+            rows[i] = row;
+        }
     }
 
-    public void TryAgain()
+    public void ClearBoard()
     {
-        ClearBoard();
-
-        enabled = true;
+        if (rows != null) {
+            for (int i = 0; i < rows.Length; i++) {
+                if (rows[i] != null) {
+                    Destroy(rows[i].gameObject);
+                }
+            }
+        }
+        rowIndex = 0;
+        columnIndex = 0;
+        columnLockIndex = -1;
+        continuationRow = null;
+        checkWord = true;
     }
 
-    private void SetRandomWord()
+    public void SetRandomWord()
     {
+        if (solutions == null) {
+            LoadData();
+        }
         word = solutions[Random.Range(0, solutions.Length)];
         word = word.ToLower().Trim();
-        lastLetter = word.Last();
     }
 
     private void Update()
     {
-        if (enabled)
-        {
+        if (enabled) {
+
+            if (continuationRow != null)
+            {
+                continuationTimePassed += Time.deltaTime;
+                if (continuationTimePassed >= continuationDelay)
+                {
+                    // Create downward tiles from one of the current tiles, chosen at range
+                    int tileColumnCount = continuationRow.tiles.Length - 1;
+                    int rowDownIndex = Random.Range(0, tileColumnCount);
+                    Tile rowDownTile = continuationRow.tiles[rowDownIndex];
+                    rowDownTile.SetState(lockedState);
+
+                    // Position column so it will be below the selected random tile
+                    RectTransform rowDownTransform = rowDownTile.GetComponent<RectTransform>();
+                    float columnTotalPadding = Constants.TILE_COLUMN_PADDING * (tileColumnCount - 1);
+                    Component tileColumnComponent = Instantiate(tileColumnPrefab, rowDownTile.transform);
+                    RectTransform tileColumnTransform = tileColumnComponent.GetComponent<RectTransform>();
+                    tileColumnTransform.sizeDelta = new Vector2(
+                        tileColumnTransform.sizeDelta.x, (rowDownTransform.sizeDelta.y * tileColumnCount) + columnTotalPadding
+                    );
+                    tileColumnTransform.localPosition = new Vector3(
+                        tileColumnTransform.localPosition.x,
+                        -((tileColumnTransform.sizeDelta.y / 2) + (columnTotalPadding + Constants.TILE_COLUMN_PADDING)),
+                        tileColumnTransform.localPosition.z
+                    );
+
+                    // Create tiles in tile column, and update this row to include these tiles
+                    Tile[] newRowTiles = new Tile[tileColumnCount + 1];
+                    newRowTiles[0] = rowDownTile;
+                    for (int i = 1; i < newRowTiles.Length; i++) {
+                        Component tileComponent = Instantiate(tilePrefab, tileColumnTransform);
+                        Tile tile = tileComponent.GetComponent<Tile>();
+                        newRowTiles[i] = tile;
+                    }
+                    continuationRow.UpdateTiles(newRowTiles);
+                    rows = new Row[1] {continuationRow};
+                    rowIndex = 0;
+                    columnIndex = 1;
+                    columnLockIndex = 0;
+                    checkWord = false;
+                    continuationRow = null;
+                }
+            }
             Row currentRow = rows[rowIndex];
 
             if (Input.GetKeyDown(KeyCode.Backspace))
@@ -140,83 +186,116 @@ public class Board : MonoBehaviour
 
         string remaining = word;
 
-        for (int i = 0; i < row.tiles.Length; i++)
+        if (!checkWord)
         {
-            Tile tile = row.tiles[i];
-
-            if (tile.letter == word[i])
+            // If not checking word set all to inactive
+            for (int i = 0; i < row.tiles.Length; i++)
             {
-                tile.SetState(correctState);
-
-                remaining = remaining.Remove(i, 1);
-                remaining = remaining.Insert(i, " ");
-            }
-            else if (!word.Contains(tile.letter))
-            {
-                tile.SetState(incorrectState);
-            }
-        }
-
-        for (int i = 0; i < row.tiles.Length; i++)
-        {
-            Tile tile = row.tiles[i];
-
-            if (tile.state != correctState && tile.state != incorrectState)
-            {
-                if (remaining.Contains(tile.letter))
+                if (i != columnLockIndex)
                 {
-                    tile.SetState(wrongSpotState);
-
-                    int index = remaining.IndexOf(tile.letter);
-                    remaining = remaining.Remove(index, 1);
-                    remaining = remaining.Insert(index, " ");
-                }
-                else
-                {
-                    tile.SetState(incorrectState);
+                    row.tiles[i].SetState(incorrectState);
                 }
             }
         }
+        else
+        {
+            // Check correct/incorrect letters first
+            for (int i = 0; i < row.tiles.Length; i++)
+            {
+                if (i != columnLockIndex)
+                {
+                    Tile tile = row.tiles[i];
 
-        if (HasWon(row)) {
-            enabled = false;
+                    if (tile.letter == word[i])
+                    {
+                        tile.SetState(correctState);
+
+                        remaining = remaining.Remove(i, 1);
+                        remaining = remaining.Insert(i, " ");
+                    }
+                    else if (!word.Contains(tile.letter))
+                    {
+                        tile.SetState(incorrectState);
+                    }
+                }
+            }
+
+            // Check for wrong spots after
+            for (int i = 0; i < row.tiles.Length; i++)
+            {
+                if (i != columnLockIndex)
+                {
+                    Tile tile = row.tiles[i];
+
+                    if (tile.state != correctState && tile.state != incorrectState)
+                    {
+                        if (remaining.Contains(tile.letter))
+                        {
+                            tile.SetState(wrongSpotState);
+
+                            int index = remaining.IndexOf(tile.letter);
+                            remaining = remaining.Remove(index, 1);
+                            remaining = remaining.Insert(index, " ");
+                        }
+                        else
+                        {
+                            tile.SetState(incorrectState);
+                        }
+                    }
+                }
+            }
         }
 
-        rowIndex++;
-        columnIndex = 0;
-
-        if (rowIndex >= rows.Length) {
-            enabled = false;
+        if (HasWonWordle(row)) {
+            // Fade rows that aren't winning row out
+            continuationDelay = Constants.ROW_FADE_TIME;
+            continuationTimePassed = 0.0f;
+            for (int i = 0; i < rows.Length; i++) {
+                if (i != rowIndex) {
+                    Row fadeRow = rows[i];
+                    for (int j = 0; j < fadeRow.tiles.Length; j++) {
+                        if (fadeRow.tiles[j].state == null) {
+                            // Make sure every tile is empty if a future row
+                            fadeRow.tiles[j].SetState(emptyState);
+                        }
+                    }
+                    fadeRow.Disappear(i);
+                }
+                continuationDelay += Constants.ROW_FADE_DELAY_FACTOR;
+            }
+            continuationRow = row;
+        } else {
+            rowIndex++;
+            columnIndex = 0;
+            columnLockIndex = -1;
+            if (rowIndex >= rows.Length) {
+                OnCompleted?.Invoke();
+            }
         }
     }
 
     private bool IsValidWord(string word)
     {
-        return validWords.Contains(word, System.StringComparer.OrdinalIgnoreCase);
-    }
-
-    private bool HasWon(Row row)
-    {
-        if (row.tiles.All(tile => tile.state == correctState))
+        for (int i = 0; i < validWords.Length; i++)
         {
-            isWordleSolved = true;
-            return true;
+            if (string.Equals(word, validWords[i], System.StringComparison.OrdinalIgnoreCase)) {
+                return true;
+            }
         }
+
         return false;
     }
 
-    private void ClearBoard()
+    private bool HasWonWordle(Row row)
     {
-        foreach (Row row in rows)
+        for (int i = 0; i < row.tiles.Length; i++)
         {
-            foreach (Tile tile in row.tiles)
-            {
-                tile.SetLetter('\0');
-                tile.SetState(emptyState);
+            if (row.tiles[i].state != correctState) {
+                return false;
             }
         }
-        rowIndex = 0;
-        columnIndex = 0;
+
+        return true;
     }
 
     private void OnEnable()
@@ -229,10 +308,5 @@ public class Board : MonoBehaviour
     {
         tryAgainButton.SetActive(true);
         newWordButton.SetActive(true);
-    }
-
-    public void SetLastLetter(char letter)
-    {
-        lastLetter = letter;
     }
 }
