@@ -4,4 +4,5 @@ public static class Constants {
     public const float TILE_COLUMN_PADDING = 16f;
     public const string ORIGINAL_SCENE_PATH = "Wordle v.0";
     public const string CURRENT_SCENE_PATH = "Wordle";
+    public const string NEW_WORDLE_SCENE_PATH = "WordleNew";
 }

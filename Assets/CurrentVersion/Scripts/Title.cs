@@ -1,10 +1,9 @@
 using System;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.UIElements;
+
 public class Title : MonoBehaviour
 {
     [System.Serializable]
@@ -12,21 +11,27 @@ public class Title : MonoBehaviour
         Title,
         Game,
         Credits,
-        VersionNotes
+        VersionNotes,
+        NewWordle
     }
+
     public Canvas titleScreen;
     public Canvas gameScreen;
     public Canvas creditsScreen;
     public Canvas versionNotesScreen;
+    public Canvas newWordleScreen;
     public Component homeButton;
     public TMP_Text startButtonText;
+    public Button newWordleButton;
     public Board initialBoard;
     private Board currentBoard;
     private bool gameActive = false;
     private bool initialStarted = false;
+
     public void Start() {
         ToTitleScreen();
     }
+
     private void BeginGame(Board board, bool maintainPreviousWord = false) {
         if (!gameActive && currentBoard == null) {
             gameActive = true;
@@ -40,12 +45,15 @@ public class Title : MonoBehaviour
             board.OnCompleted += StopGame;
         }
     }
+
     public void StartGame(Board board) {
         BeginGame(board);
     }
+
     public void TryGameAgain(Board board) {
         BeginGame(board, true);
     }
+
     public void StopGame() {
         if (gameActive && currentBoard != null) {
             currentBoard.enabled = false;
@@ -54,15 +62,23 @@ public class Title : MonoBehaviour
             gameActive = false;
         }
     }
+
     public void OpenOriginalVersionScene() {
         SceneManager.LoadSceneAsync(Constants.ORIGINAL_SCENE_PATH);
     }
+
     public void OpenCurrentVersionScene() {
         SceneManager.LoadSceneAsync(Constants.CURRENT_SCENE_PATH);
     }
+    
+    public void OpenNewWordleScene() {
+        SceneManager.LoadSceneAsync(Constants.NEW_WORDLE_SCENE_PATH);
+    }
+
     public void ToTitleScreen() {
         SwitchScreens(ScreenType.Title);
     }
+
     public void ToGameScreen() {
         if (!initialStarted) {
             initialStarted = true;
@@ -70,17 +86,25 @@ public class Title : MonoBehaviour
         }
         SwitchScreens(ScreenType.Game);
     }
+
     public void ToCreditsScreen() {
         SwitchScreens(ScreenType.Credits);
     }
+
     public void ToVersionNotesScreen() {
         SwitchScreens(ScreenType.VersionNotes);
     }
+    
+    public void ToNewWordleScreen() {
+        SwitchScreens(ScreenType.NewWordle);
+    }
+
     private void SwitchScreens(ScreenType type) {
         titleScreen.gameObject.SetActive(type == ScreenType.Title);
         gameScreen.gameObject.SetActive(type == ScreenType.Game);
         creditsScreen.gameObject.SetActive(type == ScreenType.Credits);
         versionNotesScreen.gameObject.SetActive(type == ScreenType.VersionNotes);
+        newWordleScreen.gameObject.SetActive(type == ScreenType.NewWordle);
         homeButton.gameObject.SetActive(type != ScreenType.Title);
     }
 }

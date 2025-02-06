@@ -430,6 +430,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be7c6f7fdde383642b23375026fcefff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rowPrefab: {fileID: 0}
+  tileColumnPrefab: {fileID: 0}
+  tilePrefab: {fileID: 0}
+  emptyState:
+    fillColor: {r: 0, g: 0, b: 0, a: 0}
+    outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  occupidedState:
+    fillColor: {r: 0, g: 0, b: 0, a: 0}
+    outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  correctState:
+    fillColor: {r: 0, g: 0, b: 0, a: 0}
+    outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  wrongSpotState:
+    fillColor: {r: 0, g: 0, b: 0, a: 0}
+    outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  incorrectState:
+    fillColor: {r: 0, g: 0, b: 0, a: 0}
+    outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  lockedState:
+    fillColor: {r: 0, g: 0, b: 0, a: 0}
+    outlineColor: {r: 0, g: 0, b: 0, a: 0}
+  tryAgainButton: {fileID: 0}
+  newWordButton: {fileID: 0}
+  invalidWordText: {fileID: 0}
 --- !u!114 &214794210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1440,8 +1464,10 @@ MonoBehaviour:
   gameScreen: {fileID: 702446226}
   creditsScreen: {fileID: 1709333187}
   versionNotesScreen: {fileID: 1695652969}
+  newWordleScreen: {fileID: 0}
   homeButton: {fileID: 1929207607}
   startButtonText: {fileID: 1102021288}
+  newWordleButton: {fileID: 0}
   initialBoard: {fileID: 214794209}
 --- !u!114 &349790243
 MonoBehaviour:
@@ -2274,7 +2300,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 349790242}
         m_TargetAssemblyTypeName: Title, Assembly-CSharp
-        m_MethodName: OpenCurrentVersionScene
+        m_MethodName: OpenNewWordleScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
