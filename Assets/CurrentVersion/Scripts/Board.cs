@@ -26,6 +26,7 @@ public class Board : MonoBehaviour
     public Component rowPrefab;
     public Component tileColumnPrefab;
     public Component tilePrefab;
+    public GlassAnimation glass;
     public bool isWordleSolved { get; private set; } = false;
 
     private int rowIndex;
@@ -34,6 +35,8 @@ public class Board : MonoBehaviour
     private float continuationDelay;
     private float continuationTimePassed = 0.0f;
     private Row continuationRow;
+    private bool isContinuing = false;
+    private float roundTime;
     
     private string[] solutions;
     private string[] validWords;
@@ -41,7 +44,7 @@ public class Board : MonoBehaviour
     private char lastLetter;
     public char LastLetter => lastLetter;
     private Title titleReference;
-    public bool IsRegularGame => titleReference != null && titleReference.IsRegularGame;
+    public bool IsRegularGame = true; //=> titleReference != null && titleReference.IsRegularGame;
 
     [Header("Tiles")]
     public Tile.State emptyState;
@@ -96,7 +99,10 @@ public class Board : MonoBehaviour
         columnIndex = 0;
         columnLockIndex = -1;
         continuationRow = null;
+        isContinuing = false;
         checkWord = true;
+        roundTime = 0f;
+        glass.Show();
     }
 
     public void SetRandomWord()
@@ -111,9 +117,10 @@ public class Board : MonoBehaviour
 
     private void Update()
     {
-        if (enabled) {
+        if (enabled && rows.Length > 0) {
 
-            if (continuationRow != null)
+            roundTime += Time.deltaTime;
+            if (isContinuing && continuationRow != null)
             {
                 continuationTimePassed += Time.deltaTime;
                 if (continuationTimePassed >= continuationDelay)
@@ -183,11 +190,17 @@ public class Board : MonoBehaviour
                     }
                 }
             }
+
+            if (roundTime >= Constants.GLASS_WARN_ROUND_TIME) {
+                glass.StartWarning();
+            }
         }
     }
 
     private void SubmitRow(Row row)
     {
+        glass.Flip();
+        roundTime = 0f;
         if (!IsValidWord(row.word))
         {
             invalidWordText.SetActive(true);
@@ -274,14 +287,12 @@ public class Board : MonoBehaviour
                 continuationDelay += Constants.ROW_FADE_DELAY_FACTOR;
             }
             continuationRow = row;
+            isContinuing = true;
         } else {
             if (rowIndex >= rows.Length)
             {
-                if (IsRegularGame)
-                {
-                    AudioManager.instance.PlayLose();
-                }
                 OnCompleted?.Invoke();
+                glass.Hide();
             }
             else
             {
@@ -294,7 +305,12 @@ public class Board : MonoBehaviour
             columnIndex = 0;
             columnLockIndex = -1;
             if (rowIndex >= rows.Length) {
+                if (IsRegularGame && !isContinuing)
+                {
+                    AudioManager.instance.PlayLose();
+                }
                 OnCompleted?.Invoke();
+                glass.Hide();
             }
         }
     }

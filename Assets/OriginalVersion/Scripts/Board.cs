@@ -1,7 +1,6 @@
 using UnityEngine;
 
-namespace OriginalVersion
-{
+namespace OriginalVersion {
     [DefaultExecutionOrder(-1)]
     public class Board : MonoBehaviour
     {

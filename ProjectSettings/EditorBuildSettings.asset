@@ -6,12 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/CurrentVersion/Scenes/Splash.unity
+    guid: 501162d1380c2e347b98587d29fb74e8
+  - enabled: 1
     path: Assets/CurrentVersion/Scenes/Wordle.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/OriginalVersion/Scenes/Wordle v.0.unity
-    guid: bc9d6151c5822c8489af36721c305a88
-  - enabled: 1
+    guid: 5796fdcfec30dea42bea446e5cf903da
+  - enabled: 0
     path: Assets/CurrentVersion/Scenes/WordleNew.unity
     guid: 80c5b1fbd6ce7b34f95f8366acf1bfe4
   m_configObjects:

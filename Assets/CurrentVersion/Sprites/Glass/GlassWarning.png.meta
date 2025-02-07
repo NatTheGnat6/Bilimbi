@@ -1,0 +1,1973 @@
+fileFormatVersion: 2
+guid: b7084cb44f792a14e81f547744d0857e
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2614801096203065553
+    second: GlassWarning_0
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: GlassWarning_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 14100
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23ecc077eec177c488846280eedfa488
+      internalID: 2028020226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_1
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 14100
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbca4ff837585214e89a9994ffde68af
+      internalID: -793929835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_2
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 14100
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a41dbc52627397749a8c8e8f4a923484
+      internalID: 1823781437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_3
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 14100
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 862e71f93542bdb459b838318eca77c0
+      internalID: -57151190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_4
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 14100
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 495971f1fc4db6f4f9b70a3e3801eecf
+      internalID: -707198189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 13160
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 40c83c046c6cd70458807dd4a6f716e4
+      internalID: -875194519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_6
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 13160
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c0ada3321658ad4186244516c5652d8
+      internalID: -712258199
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_7
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 13160
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b189a19ea170d44596c72c5727cbf8f
+      internalID: -29895371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_8
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 13160
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22c99d9fa56a5234388d6ce866846b47
+      internalID: -223980191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_9
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 13160
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05f869a5abd7e034b861510637086c2f
+      internalID: 2135575270
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 12220
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a0df83706381ac4db0e7df33b0120f9
+      internalID: 771120445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_11
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 12220
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 891e1d9c7f2a98343bce171b06468014
+      internalID: 1200418320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_12
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 12220
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3dd1c5bd3f2b4c4e97573c55c99aa52
+      internalID: -895089220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_13
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 12220
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f93fdcee53265e4d8b76050c31f7998
+      internalID: -409084272
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_14
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 12220
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c8470daeb2f8c447b97674aa31d6c9a
+      internalID: 1915005359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 11280
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6988e79a67932d44fa5a55f1cfeaa8ca
+      internalID: 1388956231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_16
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 11280
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29f281da7ef70514f872fef963b12ec4
+      internalID: 1126249176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_17
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 11280
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff9504198f2d3da4c96d8bfdc773e5e8
+      internalID: -608211189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_18
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 11280
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b295264c2328fe4ea2869ccaee640b4
+      internalID: 1946315137
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_19
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 11280
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 606ec5d07f86b9c4d97f7584785b5c93
+      internalID: 175488415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 10340
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ef382e834feed44a892212b431cfd2e
+      internalID: -177873769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_21
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 10340
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8109e16a7f351124fa2cc69594ee4a28
+      internalID: 1072201205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_22
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 10340
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58d1bf2cdcd200c419a9f8004e2d21cc
+      internalID: 2020529485
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_23
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 10340
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37986d799408d2a4c8f51b6d727f06bd
+      internalID: -126879067
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_24
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 10340
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f238c0ee4e27a940895f68dc3b028f0
+      internalID: 528672262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_25
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 9400
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4fa99c87ed1e7be449ac6c3bc5cc49cf
+      internalID: 1433397234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_26
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 9400
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6c4a6ee45aff20478c1f3952cf52734
+      internalID: -2071280985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_27
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 9400
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04cd0ec60cf0ca94588f299feb4ad92f
+      internalID: 2050034047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_28
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 9400
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a6a755ffe11c0848bc330997c078908
+      internalID: -814281508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_29
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 9400
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6544b2f0c462e454085c7e42831ff2d8
+      internalID: -1132682662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_30
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8460
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84817bf5d2de09049a5cbc422d91ff8b
+      internalID: 1472340250
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_31
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 8460
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bc7f215e39b62a2448cd75054a102b6c
+      internalID: -946006100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_32
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 8460
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eba039a5a391bb74989a0afcb63d8657
+      internalID: 226550986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_33
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 8460
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2d0f20c89c51b64a8d0a1e5f15ec84d
+      internalID: 1500271239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_34
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 8460
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7302be2c35d751248be50d1edf0c1d91
+      internalID: 655670653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_35
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 7520
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0113b03b5664301469ef5a0108d23e02
+      internalID: 1461392635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_36
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 7520
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 910fb1855d416a243b57444ce435144b
+      internalID: -758962231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_37
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 7520
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41048ad95a0453046a2e55ebfa077d02
+      internalID: -1711515744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_38
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 7520
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c7db631e3aefe74480ad68972f502b7
+      internalID: 927757190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_39
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 7520
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00eaf6cf740638b44886ea2e7bcaacea
+      internalID: 629753380
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 6580
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35bfcdae239563e4882c17e22d839102
+      internalID: -641866393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_41
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 6580
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5d3ff908564f6141bf72a1ca7c0a7c2
+      internalID: 462778198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_42
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 6580
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3137ac485c40b6a47af5632208215624
+      internalID: 186218953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_43
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 6580
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11234457d6ec4b348aea625e0a3c0262
+      internalID: -214193320
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_44
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 6580
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9c468edbbcd0e9247897f5acc0bfe252
+      internalID: -1252941855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_45
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 5640
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52eda63e13118a84ea0502d01aa5b799
+      internalID: -1419519481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_46
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 5640
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a2157fdbe250839478a32a9d57b1a9fd
+      internalID: 73311146
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_47
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 5640
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 06eb0530347c4d846b624b13e726c467
+      internalID: 1120625731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_48
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 5640
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51ea005d7c8228d4191ce6e8dd71a66a
+      internalID: -1477716770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_49
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 5640
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 528988ec08e409940893d10f1b0ab14d
+      internalID: -1906817096
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_50
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4700
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eeb89541bd55a434280e124f17f27e57
+      internalID: -878799714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_51
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 4700
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 133772e72faf08b43949cd0eea91b005
+      internalID: -396412866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_52
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 4700
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59cfda5fe5a0ab84e888db3916749a13
+      internalID: 1072707656
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_53
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 4700
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4ac41c3768817448831129e953e63c0
+      internalID: 240364085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_54
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 4700
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c24b649eb1dadfe44bb3790da6d23129
+      internalID: 1139024489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_55
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3760
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e652ec5f2d725641b36e72c7f0662f7
+      internalID: 2067001333
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_56
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 3760
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24e4f3b527cb9164f8d53aaee43679a0
+      internalID: 1954896661
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_57
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 3760
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b689c6545d4f04540b124055e6184884
+      internalID: -310876108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_58
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 3760
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 035435704a30a8e42999e578eb965b86
+      internalID: -1079757856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_59
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 3760
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6300cabc9065cb845b631f6131b4c757
+      internalID: 669838965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2820
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7319973a0bd506945a5fea4076851b49
+      internalID: -684490827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_61
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 2820
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 049deb54fb57c964bab136e2227d54a2
+      internalID: -879708454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_62
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 2820
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd28fe8b9351222439373024347fe4dc
+      internalID: 1846123802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_63
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 2820
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c3da080fcc706846bc44fa11cf1031f
+      internalID: -1818795728
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_64
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 2820
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11ee1d89be668d648a50b82e66c7412d
+      internalID: 150060536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_65
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1880
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 100e6ee268f22ed4684f2ee2b74eb485
+      internalID: -1280291058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_66
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 1880
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb167e307d2177b4d9eee93d08a72bbc
+      internalID: -1258664587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_67
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 1880
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4e98e16621806f4fa15b03eba97870f
+      internalID: -130362215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_68
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 1880
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f830e84520d1534f8e739748ad6ff5d
+      internalID: 919058964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_69
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 1880
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b160f695ab063246a152b3bd1e3ab5f
+      internalID: -1951903565
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_70
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 940
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a36b75872a9d32f44a99783961d0abe3
+      internalID: -76051662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_71
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 940
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c71e9e4537d39914ebbe2319c01a6c39
+      internalID: 1020331813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_72
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 940
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02b2459fdd448364b82f1289bb7d8598
+      internalID: 1665297809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_73
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 940
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 93d3bd1c3067b454eba56a4b6c07edb3
+      internalID: -724773226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_74
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 940
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1bbc8a5bd278ce942af4ca0841cd5d71
+      internalID: 1157163294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_75
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f59acf3434ddf45419e635f86410fcbf
+      internalID: 82878091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_76
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8e608a8db513f57498bd571baea12698
+      internalID: -1010858612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_77
+      rect:
+        serializedVersion: 2
+        x: 1920
+        y: 0
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6beb3d2964abf54290b1cb7708fbd22
+      internalID: 726530253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_78
+      rect:
+        serializedVersion: 2
+        x: 2880
+        y: 0
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9c39c303610e774c963fbe8fa4d6ef4
+      internalID: -2006584580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GlassWarning_79
+      rect:
+        serializedVersion: 2
+        x: 3840
+        y: 0
+        width: 960
+        height: 940
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 007528a8b2a6b6346a0970c373653360
+      internalID: 1209710274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 462b0b406b8c030468435e3d0ac51dfb
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      GlassWarning_0: 2028020226
+      GlassWarning_1: -793929835
+      GlassWarning_10: 771120445
+      GlassWarning_11: 1200418320
+      GlassWarning_12: -895089220
+      GlassWarning_13: -409084272
+      GlassWarning_14: 1915005359
+      GlassWarning_15: 1388956231
+      GlassWarning_16: 1126249176
+      GlassWarning_17: -608211189
+      GlassWarning_18: 1946315137
+      GlassWarning_19: 175488415
+      GlassWarning_2: 1823781437
+      GlassWarning_20: -177873769
+      GlassWarning_21: 1072201205
+      GlassWarning_22: 2020529485
+      GlassWarning_23: -126879067
+      GlassWarning_24: 528672262
+      GlassWarning_25: 1433397234
+      GlassWarning_26: -2071280985
+      GlassWarning_27: 2050034047
+      GlassWarning_28: -814281508
+      GlassWarning_29: -1132682662
+      GlassWarning_3: -57151190
+      GlassWarning_30: 1472340250
+      GlassWarning_31: -946006100
+      GlassWarning_32: 226550986
+      GlassWarning_33: 1500271239
+      GlassWarning_34: 655670653
+      GlassWarning_35: 1461392635
+      GlassWarning_36: -758962231
+      GlassWarning_37: -1711515744
+      GlassWarning_38: 927757190
+      GlassWarning_39: 629753380
+      GlassWarning_4: -707198189
+      GlassWarning_40: -641866393
+      GlassWarning_41: 462778198
+      GlassWarning_42: 186218953
+      GlassWarning_43: -214193320
+      GlassWarning_44: -1252941855
+      GlassWarning_45: -1419519481
+      GlassWarning_46: 73311146
+      GlassWarning_47: 1120625731
+      GlassWarning_48: -1477716770
+      GlassWarning_49: -1906817096
+      GlassWarning_5: -875194519
+      GlassWarning_50: -878799714
+      GlassWarning_51: -396412866
+      GlassWarning_52: 1072707656
+      GlassWarning_53: 240364085
+      GlassWarning_54: 1139024489
+      GlassWarning_55: 2067001333
+      GlassWarning_56: 1954896661
+      GlassWarning_57: -310876108
+      GlassWarning_58: -1079757856
+      GlassWarning_59: 669838965
+      GlassWarning_6: -712258199
+      GlassWarning_60: -684490827
+      GlassWarning_61: -879708454
+      GlassWarning_62: 1846123802
+      GlassWarning_63: -1818795728
+      GlassWarning_64: 150060536
+      GlassWarning_65: -1280291058
+      GlassWarning_66: -1258664587
+      GlassWarning_67: -130362215
+      GlassWarning_68: 919058964
+      GlassWarning_69: -1951903565
+      GlassWarning_7: -29895371
+      GlassWarning_70: -76051662
+      GlassWarning_71: 1020331813
+      GlassWarning_72: 1665297809
+      GlassWarning_73: -724773226
+      GlassWarning_74: 1157163294
+      GlassWarning_75: 82878091
+      GlassWarning_76: -1010858612
+      GlassWarning_77: 726530253
+      GlassWarning_78: -2006584580
+      GlassWarning_79: 1209710274
+      GlassWarning_8: -223980191
+      GlassWarning_9: 2135575270
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

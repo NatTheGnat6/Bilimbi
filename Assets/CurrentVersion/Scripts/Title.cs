@@ -12,14 +12,12 @@ public class Title : MonoBehaviour
         Game,
         Credits,
         VersionNotes,
-        NewWordle
     }
 
     public Canvas titleScreen;
     public Canvas gameScreen;
     public Canvas creditsScreen;
     public Canvas versionNotesScreen;
-    public Canvas newWordleScreen;
     public Component homeButton;
     public TMP_Text startButtonText;
     public Board initialBoard;
@@ -28,6 +26,7 @@ public class Title : MonoBehaviour
     private bool initialStarted = false;
     private bool isRegularGame = false;
     public bool IsRegularGame => isRegularGame;
+    public bool hasSwitchedScreens = false;
 
     public void Start() {
         ToTitleScreen();
@@ -79,6 +78,9 @@ public class Title : MonoBehaviour
     }
 
     public void ToTitleScreen() {
+        if (hasSwitchedScreens) {
+            AudioManager.instance.PlayButtonSound();
+        }
         SwitchScreens(ScreenType.Title);
     }
 
@@ -100,18 +102,13 @@ public class Title : MonoBehaviour
         AudioManager.instance.PlayButtonSound();
         SwitchScreens(ScreenType.VersionNotes);
     }
-    
-    public void ToNewWordleScreen() {
-        AudioManager.instance.PlayButtonSound();
-        SwitchScreens(ScreenType.NewWordle);
-    }
 
     private void SwitchScreens(ScreenType type) {
         titleScreen.gameObject.SetActive(type == ScreenType.Title);
         gameScreen.gameObject.SetActive(type == ScreenType.Game);
         creditsScreen.gameObject.SetActive(type == ScreenType.Credits);
         versionNotesScreen.gameObject.SetActive(type == ScreenType.VersionNotes);
-        newWordleScreen.gameObject.SetActive(type == ScreenType.NewWordle);
         homeButton.gameObject.SetActive(type != ScreenType.Title);
+        hasSwitchedScreens = true;
     }
 }
