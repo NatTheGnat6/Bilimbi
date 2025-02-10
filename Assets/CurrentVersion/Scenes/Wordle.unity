@@ -561,7 +561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rowPrefab: {fileID: 3595732846103208331, guid: a821c541e7689dd4bab8bcbefdb2a10d, type: 3}
   tileColumnPrefab: {fileID: 4235900930338480398, guid: b5325512ec25cbd40a20a4a9081a8bff, type: 3}
-  tilePrefab: {fileID: 8886515890888993868, guid: 9d559f8081ab5c74a9f690440223fcef, type: 3}
+  tilePrefab: {fileID: 8886515890888993868, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   glass: {fileID: 328019744}
   IsRegularGame: 1
   emptyState:
@@ -918,7 +918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rowPrefab: {fileID: 3595732846103208331, guid: a821c541e7689dd4bab8bcbefdb2a10d, type: 3}
   tileColumnPrefab: {fileID: 4235900930338480398, guid: b5325512ec25cbd40a20a4a9081a8bff, type: 3}
-  tilePrefab: {fileID: 8886515890888993868, guid: 9d559f8081ab5c74a9f690440223fcef, type: 3}
+  tilePrefab: {fileID: 8886515890888993868, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
   glass: {fileID: 0}
   IsRegularGame: 1
   emptyState:

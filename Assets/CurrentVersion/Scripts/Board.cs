@@ -41,19 +41,15 @@ public class Board : MonoBehaviour
     
     private string[] solutions;
     private string[] validWords;
+    private bool submittingRow = false;
+    private Row submittedRow;
+    private Tile.State[] submittedStates;
+    private float submitRowTimePassed = 0.0f;
     public string word { get; private set; }
     private char lastLetter;
     public char LastLetter => lastLetter;
     private Title titleReference;
     public bool IsRegularGame = true; //=> titleReference != null && titleReference.IsRegularGame;
-
-    [Header("Tiles")]
-    public Tile.State emptyState;
-    public Tile.State occupidedState;
-    public Tile.State correctState;
-    public Tile.State wrongSpotState;
-    public Tile.State incorrectState;
-    public Tile.State lockedState;
 
     [Header("UI")]
     public GameObject tryAgainButton;
@@ -119,80 +115,151 @@ public class Board : MonoBehaviour
     private void Update()
     {
         if (enabled && rows.Length > 0) {
-            roundTime += Time.deltaTime;
-            if (isContinuing && continuationRow != null)
-            {
-                continuationTimePassed += Time.deltaTime;
-                if (continuationTimePassed >= continuationDelay)
-                {
-                    // Create downward tiles from one of the current tiles, chosen at range
-                    int tileColumnCount = continuationRow.tiles.Length - 1;
-                    int rowDownIndex = Random.Range(0, tileColumnCount);
-                    Tile rowDownTile = continuationRow.tiles[rowDownIndex];
-                    rowDownTile.SetState(lockedState);
-
-                    // Position column so it will be below the selected random tile
-                    RectTransform rowDownTransform = rowDownTile.GetComponent<RectTransform>();
-                    float columnTotalPadding = Constants.TILE_COLUMN_PADDING * (tileColumnCount - 1);
-                    Component tileColumnComponent = Instantiate(tileColumnPrefab, rowDownTile.transform);
-                    RectTransform tileColumnTransform = tileColumnComponent.GetComponent<RectTransform>();
-                    tileColumnTransform.sizeDelta = new Vector2(
-                        tileColumnTransform.sizeDelta.x, (rowDownTransform.sizeDelta.y * tileColumnCount) + columnTotalPadding
-                    );
-                    tileColumnTransform.localPosition = new Vector3(
-                        tileColumnTransform.localPosition.x,
-                        -((tileColumnTransform.sizeDelta.y / 2) + (columnTotalPadding + Constants.TILE_COLUMN_PADDING)),
-                        tileColumnTransform.localPosition.z
-                    );
-
-                    // Create tiles in tile column, and update this row to include these tiles
-                    Tile[] newRowTiles = new Tile[tileColumnCount + 1];
-                    newRowTiles[0] = rowDownTile;
-                    for (int i = 1; i < newRowTiles.Length; i++) {
-                        Component tileComponent = Instantiate(tilePrefab, tileColumnTransform);
-                        Tile tile = tileComponent.GetComponent<Tile>();
-                        newRowTiles[i] = tile;
+            if (submittingRow && submittedRow != null && submittedStates != null) {
+                submitRowTimePassed += Time.deltaTime;
+                float submittingAlpha = submitRowTimePassed / Constants.SUBMIT_ROW_TIME;
+                float tileSubmitTime = Constants.SUBMIT_ROW_TIME / submittedStates.Length;
+                if (submittingAlpha >= 1) {
+                    submittingRow = false;
+                    for (int i = 0; i < submittedStates.Length; i++) {
+                        submittedRow.tiles[i].SetSwapAlpha(1);
+                        submittedRow.tiles[i].SetState(submittedStates[i]);
                     }
-                    continuationRow.UpdateTiles(newRowTiles);
-                    rows = new Row[1] {continuationRow};
-                    rowIndex = 0;
-                    columnIndex = 1;
-                    columnLockIndex = 0;
-                    checkWord = false;
-                    continuationRow = null;
+                    if (HasWonWordle(submittedRow)) {
+                        // Fade rows that aren't winning row out
+                        continuationDelay = Constants.ROW_FADE_TIME;
+                        continuationTimePassed = 0.0f;
+                        for (int i = 0; i < rows.Length; i++) {
+                            if (i != rowIndex) {
+                                Row fadeRow = rows[i];
+                                // for (int j = 0; j < fadeRow.tiles.Length; j++) {
+                                //     if (fadeRow.tiles[j].state == null) {
+                                //         // Make sure every tile is empty if a future row
+                                //         fadeRow.tiles[j].SetState(Tile.State.Empty);
+                                //     }
+                                // }
+                                fadeRow.Disappear(i);
+                            }
+                            continuationDelay += Constants.ROW_FADE_DELAY_FACTOR;
+                        }
+                        continuationRow = submittedRow;
+                        isContinuing = true;
+                    } else {
+                        if (rowIndex >= rows.Length)
+                        {
+                            OnCompleted?.Invoke();
+                            glass.Hide();
+                        }
+                        else
+                        {
+                            if (IsRegularGame)
+                            {
+                                AudioManager.instance.PlayWrongGuess();
+                            }
+                        }
+                        rowIndex++;
+                        columnIndex = 0;
+                        columnLockIndex = -1;
+                        if (rowIndex >= rows.Length) {
+                            if (IsRegularGame && !isContinuing)
+                            {
+                                AudioManager.instance.PlayLose();
+                            }
+                            OnCompleted?.Invoke();
+                            glass.Hide();
+                        }
+                    }
+                    submittedRow = null;
+                    submittedStates = null;
+                    submitRowTimePassed = 0f;
+                } else {
+                    for (int i = 0; i < submittedStates.Length; i++) {
+                        if (submittingAlpha >= i * tileSubmitTime) {
+                            float swapAlpha = (submittingAlpha - (i * tileSubmitTime)) / tileSubmitTime;
+                            submittedRow.tiles[i].SetSwapAlpha(swapAlpha);
+                            if (swapAlpha >= 0.5) {
+                                submittedRow.tiles[i].SetState(submittedStates[i]);
+                            }
+                        }
+                    }
                 }
-            }
-            Row currentRow = rows[rowIndex];
+            } else {
 
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                columnIndex = Mathf.Max(columnIndex - 1, columnLockIndex + 1);
-                currentRow.tiles[columnIndex].SetLetter('\0');
-                currentRow.tiles[columnIndex].SetState(emptyState);
-                invalidWordText.SetActive(false);
-            }
-            else if (columnIndex >= rows[rowIndex].tiles.Length)
-            {
-                if (Input.GetKeyDown(KeyCode.Return)) {
-                    SubmitRow(currentRow);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < SUPPORTED_KEYS.Length; i++)
+                roundTime += Time.deltaTime;
+                if (isContinuing && continuationRow != null)
                 {
-                    if (Input.GetKeyDown(SUPPORTED_KEYS[i]))
+                    continuationTimePassed += Time.deltaTime;
+                    if (continuationTimePassed >= continuationDelay)
                     {
-                        currentRow.tiles[columnIndex].SetLetter((char)SUPPORTED_KEYS[i]);
-                        currentRow.tiles[columnIndex].SetState(occupidedState);
-                        columnIndex++;
-                        break;
+                        // Create downward tiles from one of the current tiles, chosen at range
+                        int tileColumnCount = continuationRow.tiles.Length - 1;
+                        int rowDownIndex = Random.Range(0, tileColumnCount);
+                        Tile rowDownTile = continuationRow.tiles[rowDownIndex];
+                        rowDownTile.SetState(Tile.State.Locked);
+
+                        // Position column so it will be below the selected random tile
+                        RectTransform rowDownTransform = rowDownTile.GetComponent<RectTransform>();
+                        float columnTotalPadding = Constants.TILE_COLUMN_PADDING * (tileColumnCount - 1);
+                        Component tileColumnComponent = Instantiate(tileColumnPrefab, rowDownTile.transform);
+                        RectTransform tileColumnTransform = tileColumnComponent.GetComponent<RectTransform>();
+                        tileColumnTransform.sizeDelta = new Vector2(
+                            tileColumnTransform.sizeDelta.x, (rowDownTransform.sizeDelta.y * tileColumnCount) + columnTotalPadding
+                        );
+                        tileColumnTransform.localPosition = new Vector3(
+                            tileColumnTransform.localPosition.x,
+                            -((tileColumnTransform.sizeDelta.y / 2) + (columnTotalPadding + Constants.TILE_COLUMN_PADDING)),
+                            tileColumnTransform.localPosition.z
+                        );
+
+                        // Create tiles in tile column, and update this row to include these tiles
+                        Tile[] newRowTiles = new Tile[tileColumnCount + 1];
+                        newRowTiles[0] = rowDownTile;
+                        for (int i = 1; i < newRowTiles.Length; i++) {
+                            Component tileComponent = Instantiate(tilePrefab, tileColumnTransform);
+                            Tile tile = tileComponent.GetComponent<Tile>();
+                            newRowTiles[i] = tile;
+                        }
+                        continuationRow.UpdateTiles(newRowTiles);
+                        rows = new Row[1] {continuationRow};
+                        rowIndex = 0;
+                        columnIndex = 1;
+                        columnLockIndex = 0;
+                        checkWord = false;
+                        continuationRow = null;
                     }
                 }
-            }
+                Row currentRow = rows[rowIndex];
 
-            if (roundTime >= Constants.GLASS_WARN_ROUND_TIME) {
-                glass.StartWarning();
+                if (Input.GetKeyDown(KeyCode.Backspace))
+                {
+                    columnIndex = Mathf.Max(columnIndex - 1, columnLockIndex + 1);
+                    currentRow.tiles[columnIndex].SetLetter('\0');
+                    currentRow.tiles[columnIndex].SetState(Tile.State.Empty);
+                    invalidWordText.SetActive(false);
+                }
+                else if (columnIndex >= rows[rowIndex].tiles.Length)
+                {
+                    if (Input.GetKeyDown(KeyCode.Return)) {
+                        SubmitRow(currentRow);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < SUPPORTED_KEYS.Length; i++)
+                    {
+                        if (Input.GetKeyDown(SUPPORTED_KEYS[i]))
+                        {
+                            currentRow.tiles[columnIndex].SetLetter((char)SUPPORTED_KEYS[i]);
+                            currentRow.tiles[columnIndex].SetState(Tile.State.Occupied);
+                            columnIndex++;
+                            break;
+                        }
+                    }
+                }
+
+                if (roundTime >= Constants.GLASS_WARN_ROUND_TIME) {
+                    glass.StartWarning();
+                }
             }
         }
     }
@@ -208,6 +275,9 @@ public class Board : MonoBehaviour
         }
 
         string remaining = word;
+
+        submittedStates = new Tile.State[row.tiles.Length];
+        print(row.word + " | " + word + " | " + remaining);
         if (!checkWord)
         {
             // If not checking word set all to inactive
@@ -215,7 +285,7 @@ public class Board : MonoBehaviour
             {
                 if (i != columnLockIndex)
                 {
-                    row.tiles[i].SetState(incorrectState);
+                    submittedStates[i] = Tile.State.Incorrect;
                 }
             }
         }
@@ -230,14 +300,14 @@ public class Board : MonoBehaviour
 
                     if (tile.letter == word[i])
                     {
-                        tile.SetState(correctState);
+                        submittedStates[i] = Tile.State.Correct;
 
                         remaining = remaining.Remove(i, 1);
                         remaining = remaining.Insert(i, " ");
                     }
                     else if (!word.Contains(tile.letter))
                     {
-                        tile.SetState(incorrectState);
+                        submittedStates[i] = Tile.State.Incorrect;
                     }
                 }
             }
@@ -249,11 +319,11 @@ public class Board : MonoBehaviour
                 {
                     Tile tile = row.tiles[i];
 
-                    if (tile.state != correctState && tile.state != incorrectState)
+                    if (submittedStates[i] != Tile.State.Correct && submittedStates[i] != Tile.State.Incorrect)
                     {
                         if (remaining.Contains(tile.letter))
                         {
-                            tile.SetState(wrongSpotState);
+                            submittedStates[i] = Tile.State.WrongSpot;
 
                             int index = remaining.IndexOf(tile.letter);
                             remaining = remaining.Remove(index, 1);
@@ -261,57 +331,20 @@ public class Board : MonoBehaviour
                         }
                         else
                         {
-                            tile.SetState(incorrectState);
+                            submittedStates[i] = Tile.State.Incorrect;
                         }
                     }
                 }
             }
         }
-
-        if (HasWonWordle(row)) {
-            // Fade rows that aren't winning row out
-            continuationDelay = Constants.ROW_FADE_TIME;
-            continuationTimePassed = 0.0f;
-            for (int i = 0; i < rows.Length; i++) {
-                if (i != rowIndex) {
-                    Row fadeRow = rows[i];
-                    for (int j = 0; j < fadeRow.tiles.Length; j++) {
-                        if (fadeRow.tiles[j].state == null) {
-                            // Make sure every tile is empty if a future row
-                            fadeRow.tiles[j].SetState(emptyState);
-                        }
-                    }
-                    fadeRow.Disappear(i);
-                }
-                continuationDelay += Constants.ROW_FADE_DELAY_FACTOR;
-            }
-            continuationRow = row;
-            isContinuing = true;
-        } else {
-            if (rowIndex >= rows.Length)
-            {
-                OnCompleted?.Invoke();
-                glass.Hide();
-            }
-            else
-            {
-                if (IsRegularGame)
-                {
-                    AudioManager.instance.PlayWrongGuess();
-                }
-            }
-            rowIndex++;
-            columnIndex = 0;
-            columnLockIndex = -1;
-            if (rowIndex >= rows.Length) {
-                if (IsRegularGame && !isContinuing)
-                {
-                    AudioManager.instance.PlayLose();
-                }
-                OnCompleted?.Invoke();
-                glass.Hide();
-            }
+        submittedRow = row;
+        submitRowTimePassed = 0f;
+        submittingRow = true;
+        for (int i = 0; i < submittedStates.Length; i++) {
+            print(i + " | " + submittedStates[i]);
         }
+        print(row.word + " | " + word + " | " + remaining);
+        print("------------------");
     }
 
     private bool IsValidWord(string word)
@@ -328,7 +361,7 @@ public class Board : MonoBehaviour
 
     private bool HasWonWordle(Row row)
     {
-        if (row.tiles.All(tile => tile.state == correctState))
+        if (row.tiles.All(tile => tile.state == Tile.State.Correct))
         {
             isWordleSolved = true;
             if (IsRegularGame)

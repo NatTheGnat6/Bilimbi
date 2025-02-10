@@ -8,6 +8,7 @@ public class Row : MonoBehaviour
     private float fadeDelay = 0;
     private float fadeTimePassed = 0.0f;
     public Tile[] tiles { get; private set; }
+    public Tile tilePrefab;
     
     public string word
     {
@@ -25,7 +26,10 @@ public class Row : MonoBehaviour
 
     private void Awake()
     {
-        tiles = GetComponentsInChildren<Tile>();
+        tiles = new Tile[5];
+        for (int i = 0; i < tiles.Length; i++) {
+            tiles[i] = Instantiate(tilePrefab, transform);
+        }
     }
 
     private void Update() {
