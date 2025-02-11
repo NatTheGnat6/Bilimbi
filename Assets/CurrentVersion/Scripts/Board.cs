@@ -4,6 +4,7 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 
 public delegate void BoardCompleted();
 
@@ -118,7 +119,6 @@ public class Board : MonoBehaviour
     private void Update()
     {
         if (enabled && rows.Length > 0) {
-
             roundTime += Time.deltaTime;
             if (isContinuing && continuationRow != null)
             {
@@ -208,7 +208,6 @@ public class Board : MonoBehaviour
         }
 
         string remaining = word;
-
         if (!checkWord)
         {
             // If not checking word set all to inactive

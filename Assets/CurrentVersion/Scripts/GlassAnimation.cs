@@ -33,7 +33,6 @@ public class GlassAnimation : MonoBehaviour
     }
     public void Update() {
         if (enabled) {
-            print(animator.GetInteger("State") + " | " + Time.deltaTime);
             animator.SetInteger("State", -1);
             if (doFlip) {
                 flipTimer += Time.fixedDeltaTime;

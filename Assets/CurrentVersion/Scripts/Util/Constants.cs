@@ -6,4 +6,5 @@ public static class Constants {
     public const string CURRENT_SCENE_PATH = "Wordle";
     public const string NEW_WORDLE_SCENE_PATH = "WordleNew";
     public const float GLASS_WARN_ROUND_TIME = 9f;
+    public const float SUBMIT_ROW_TIME = 1f;
 }
