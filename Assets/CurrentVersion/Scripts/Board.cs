@@ -29,6 +29,7 @@ public class Board : MonoBehaviour
     public Component tilePrefab;
     public GlassAnimation glass;
     public bool isWordleSolved { get; private set; } = false;
+    public bool isScrabbleGame = false;
 
     private int rowIndex;
     private int columnIndex;
@@ -54,11 +55,13 @@ public class Board : MonoBehaviour
     public Tile.State wrongSpotState;
     public Tile.State incorrectState;
     public Tile.State lockedState;
+    public Tile.State validScrabbleWordState;
 
     [Header("UI")]
     public GameObject tryAgainButton;
     public GameObject newWordButton;
     public GameObject invalidWordText;
+    private string[] validScrabbleWords;
 
     private void Awake()
     {
@@ -73,12 +76,17 @@ public class Board : MonoBehaviour
 
         textFile = Resources.Load("official_wordle_all") as TextAsset;
         validWords = textFile.text.Split(SEPARATOR, System.StringSplitOptions.None);
+
+        TextAsset scrabText = Resources.Load("dictionary") as TextAsset;
+        validScrabbleWords = scrabText.text.Split(SEPARATOR, System.StringSplitOptions.None)
+            .Where(sword => sword.Length == 6)
+            .ToArray();
     }
 
-    public void GenerateRows() {
+    public void GenerateRows(int numRows = 6) {
         ClearBoard();
-        rows = new Row[6];
-        for (int i = 0; i < 6; i++) {
+        rows = new Row[numRows];
+        for (int i = 0; i < numRows; i++) {
             Component rowComponent = Instantiate(rowPrefab, transform);
             rowComponent.name = i.ToString();
             Row row = rowComponent.GetComponent<Row>();
@@ -120,12 +128,26 @@ public class Board : MonoBehaviour
     {
         if (enabled && rows.Length > 0) {
             roundTime += Time.deltaTime;
+
+            if (isContinuing)
+            {
+                continuationTimePassed += Time.deltaTime;
+                if (continuationTimePassed >= continuationDelay)
+                {
+                    isContinuing = false;
+                    isScrabbleGame = true;
+                    GenerateRows(2);
+                    return;
+                }
+            }
+
+            // Wordle downward tile creation logic
             if (isContinuing && continuationRow != null)
             {
                 continuationTimePassed += Time.deltaTime;
                 if (continuationTimePassed >= continuationDelay)
                 {
-                    // Create downward tiles from one of the current tiles, chosen at range
+                    // Create downward tiles from one of the current tiles, chosen at random
                     int tileColumnCount = continuationRow.tiles.Length - 1;
                     int rowDownIndex = Random.Range(0, tileColumnCount);
                     Tile rowDownTile = continuationRow.tiles[rowDownIndex];
@@ -162,6 +184,8 @@ public class Board : MonoBehaviour
                     continuationRow = null;
                 }
             }
+
+            // Handle input differently based on game mode
             Row currentRow = rows[rowIndex];
 
             if (Input.GetKeyDown(KeyCode.Backspace))
@@ -197,10 +221,38 @@ public class Board : MonoBehaviour
         }
     }
 
+    private bool IsValidScrabbleWord(string word)
+    {
+        return validScrabbleWords.Contains(word.ToLower());
+    }
+
     private void SubmitRow(Row row)
     {
         glass.Flip();
         roundTime = 0f;
+
+        if (isScrabbleGame) {
+            string enteredScrabbleWord = row.word.ToLower();
+
+            // Check the word is valid and starts with the last letter of Wordle
+            if (!validScrabbleWords.Contains(enteredScrabbleWord) || enteredScrabbleWord[0] != lastLetter)
+            {
+                invalidWordText.SetActive(true);
+                return;
+            }
+            
+            lastLetter = enteredScrabbleWord.Last();
+            foreach (var tile in row.tiles)
+            {
+                tile.SetState(validScrabbleWordState);
+            }
+
+            rowIndex++;
+            columnIndex = 0;
+            return;
+        }
+
+        // Wordle Validation
         if (!IsValidWord(row.word))
         {
             invalidWordText.SetActive(true);
@@ -210,7 +262,6 @@ public class Board : MonoBehaviour
         string remaining = word;
         if (!checkWord)
         {
-            // If not checking word set all to inactive
             for (int i = 0; i < row.tiles.Length; i++)
             {
                 if (i != columnLockIndex)
@@ -269,7 +320,7 @@ public class Board : MonoBehaviour
         }
 
         if (HasWonWordle(row)) {
-            // Fade rows that aren't winning row out
+            // Start fading effect
             continuationDelay = Constants.ROW_FADE_TIME;
             continuationTimePassed = 0.0f;
             for (int i = 0; i < rows.Length; i++) {
@@ -277,7 +328,6 @@ public class Board : MonoBehaviour
                     Row fadeRow = rows[i];
                     for (int j = 0; j < fadeRow.tiles.Length; j++) {
                         if (fadeRow.tiles[j].state == null) {
-                            // Make sure every tile is empty if a future row
                             fadeRow.tiles[j].SetState(emptyState);
                         }
                     }
@@ -287,27 +337,12 @@ public class Board : MonoBehaviour
             }
             continuationRow = row;
             isContinuing = true;
-        } else {
-            if (rowIndex >= rows.Length)
-            {
-                OnCompleted?.Invoke();
-                glass.Hide();
-            }
-            else
-            {
-                if (IsRegularGame)
-                {
-                    AudioManager.instance.PlayWrongGuess();
-                }
-            }
+        }
+        else {
             rowIndex++;
             columnIndex = 0;
             columnLockIndex = -1;
             if (rowIndex >= rows.Length) {
-                if (IsRegularGame && !isContinuing)
-                {
-                    AudioManager.instance.PlayLose();
-                }
                 OnCompleted?.Invoke();
                 glass.Hide();
             }
@@ -335,6 +370,8 @@ public class Board : MonoBehaviour
             {
                 AudioManager.instance.PlayWin();
             }
+
+            isContinuing = true;
             return true;
         }
         return false;
