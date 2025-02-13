@@ -157,7 +157,8 @@ public class Board : MonoBehaviour
             {
                 validScrabbleWords = scrabText.text
                     .Split(SEPARATOR, System.StringSplitOptions.None)
-                    .Where(s => s.Length == 6)
+                    .Where(s => s.Length == 5)
+                    .Select(s => s.ToLower())
                     .ToArray();
             }
         }
