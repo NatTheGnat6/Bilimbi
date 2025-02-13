@@ -46,4 +46,11 @@ public class Tile : MonoBehaviour
     }
 
     private Color GetAlphaAppliedColor(Color color) => Helper.AlphaifyColor(color, alpha);
+
+    public static State scrabbleWordState = new State
+    { 
+        fillColor = Color.green, 
+        outlineColor = Color.black 
+    };
+
 }
