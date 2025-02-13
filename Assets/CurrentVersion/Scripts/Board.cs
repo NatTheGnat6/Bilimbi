@@ -64,6 +64,8 @@ public class Board : MonoBehaviour
 
     private void Awake()
     {
+        validScrabbleWordState.fillColor   = correctState.fillColor;
+        validScrabbleWordState.outlineColor = correctState.outlineColor;
         rows = GetComponentsInChildren<Row>();
     }
 
@@ -72,7 +74,7 @@ public class Board : MonoBehaviour
         LoadData();
 
         ClearBoard();
-        GenerateRows(6);
+        GenerateRows(6, true);
         SetRandomWord();
     }
 
@@ -87,7 +89,7 @@ public class Board : MonoBehaviour
             {
                 isContinuing = false;
                 isScrabbleGame = true;
-                GenerateRows(2);
+                GenerateRows(2, false);
             }
         }
 
@@ -107,7 +109,6 @@ public class Board : MonoBehaviour
         }
         else if (columnIndex >= currentRow.tiles.Length)
         {
-            Debug.Log($"Row {rowIndex} is full. columnIndex={columnIndex}, tileCount={currentRow.tiles.Length}");
 
             if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
             {
@@ -169,7 +170,7 @@ public class Board : MonoBehaviour
         if (solutions == null || solutions.Length == 0) { LoadData(); }
         if (solutions == null || solutions.Length == 0)
         {
-            Debug.LogWarning("No solutions found in Resources. Please check your text files.");
+            Debug.LogWarning("No solutions found in Resources");
             word = "random";
         }
         else
@@ -178,7 +179,6 @@ public class Board : MonoBehaviour
         }
 
         lastLetter = word[word.Length - 1];
-        Debug.Log($"[Wordle] Chosen word: {word} (lastLetter='{lastLetter}')");
     }
 
     public void ClearBoard()
@@ -205,9 +205,48 @@ public class Board : MonoBehaviour
         glass.Show();
     }
 
-    public void GenerateRows(int numRows = 6)
+    public void PartialClear()
     {
-        ClearBoard();
+        Debug.LogWarning("PartialClear called");
+        if (continuationRow == null)
+        {
+            Debug.LogWarning("PartialClear called but continuationRow is null");
+            return;
+        }
+
+        // Destroy every row except the winning one
+        for (int i = 0; i < rows.Length; i++)
+        {
+            if (rows[i] != null && rows[i] != continuationRow)
+            {
+                Destroy(rows[i].gameObject);
+            }
+        }
+
+        rows = new Row[] { continuationRow };
+
+        rowIndex = 1;
+        columnIndex = 0;
+        columnLockIndex = -1;
+
+        glass.Show();
+
+        roundTime = 0f;
+        checkWord = true;
+    }
+
+    public void GenerateRows(int numRows = 6, bool partialClear = false)
+    {
+        if (partialClear == false)
+        {
+            ClearBoard();
+        }
+
+        if (partialClear == true)
+        {
+            PartialClear();
+        }
+        
         rows = new Row[numRows];
         for (int i = 0; i < numRows; i++)
         {
@@ -215,15 +254,6 @@ public class Board : MonoBehaviour
             rowComp.name = "Row " + i;
             Row row = rowComp.GetComponent<Row>();
             rows[i] = row;
-
-            if (row.tiles != null)
-            {
-                Debug.Log($"Generated Row {i} with {row.tiles.Length} tiles.");
-            }
-            else
-            {
-                Debug.LogWarning($"Row {i} has no tiles array!");
-            }
         }
 
         rowIndex = 0;
@@ -326,7 +356,7 @@ public class Board : MonoBehaviour
 
         if (HasWonWordle(row))
         {
-            Debug.Log("[Wordle] You solved it!");
+            Debug.Log("Wordle solved");
             isWordleSolved = true;
 
             continuationDelay = Constants.ROW_FADE_TIME;
