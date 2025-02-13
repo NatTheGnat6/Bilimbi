@@ -111,4 +111,10 @@ public class Title : MonoBehaviour
         homeButton.gameObject.SetActive(type != ScreenType.Title);
         hasSwitchedScreens = true;
     }
+
+    public void QuitButton() { 
+
+        Debug.Log("Quitting game...");
+        Application.Quit();
+    }
 }
