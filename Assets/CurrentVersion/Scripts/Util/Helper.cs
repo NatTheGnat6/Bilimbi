@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
 
 public static class Helper {
+    public delegate void Event();
     public static float CubicEase(float alpha) {
         return alpha * alpha * alpha;
     }
@@ -24,4 +25,7 @@ public static class Helper {
         throw new NullReferenceException();
     }
     public static Color ColorFromHex(String hex) => ColorFromHex(hex, 1);
+    public static float Approach(float at, float to, float speed) {
+        return to;
+    }
 }

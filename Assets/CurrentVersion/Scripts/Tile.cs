@@ -23,6 +23,7 @@ public class Tile : MonoBehaviour
         public Color fillColor;
         public Color outlineColor;
     }
+    public Row row;
     private float alpha = 1.0f;
     public State state { get; private set; }
     public char letter { get; private set; }
