@@ -7,7 +7,7 @@ public class Pallette : MonoBehaviour
         fillColor = Helper.ColorFromHex("003838", 0),
         outlineColor = Helper.ColorFromHex("016B6B")
     };
-    public Tile.StateColor occupidedState =  new Tile.StateColor() {
+    public Tile.StateColor occupidedState = new Tile.StateColor() {
         fillColor = Helper.ColorFromHex("003838", 0),
         outlineColor = Helper.ColorFromHex("138484")
     };
@@ -26,5 +26,9 @@ public class Pallette : MonoBehaviour
     public Tile.StateColor lockedState = new Tile.StateColor() {
         fillColor = Helper.ColorFromHex("0092BF"),
         outlineColor = Helper.ColorFromHex("0092BF")
+    };
+    public Tile.StateColor validScrabbleState = new Tile.StateColor() {
+        fillColor = Helper.ColorFromHex("1E9B37"),
+        outlineColor = Helper.ColorFromHex("1E9B37")
     };
 }

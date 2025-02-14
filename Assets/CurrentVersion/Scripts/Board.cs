@@ -25,43 +25,56 @@ public class Board : MonoBehaviour
     private static readonly string[] SEPARATOR = new string[] { "\r\n", "\r", "\n" };
     private enum ContinuationType {
         None,
+        InitialWin,
         BuildOff,
-        BuildBetween
+        // BuildBetween // The locked letter is not the start but in the middle of word
     }
     public event Helper.Event OnCompleted;
-    private bool checkWord = true;
-    private Row[] rows;
+
+    [Header("Prefabs / References")]
     public Row rowPrefab;
     public Tile tilePrefab;
     public GlassAnimation glass;
-    public bool isWordleSolved { get; private set; } = false;
-
-    private int rowIndex;
-    private int columnIndex;
-    private int columnSkipIndex = -1;
-    private bool waitForFade = false;
-    private int rowsFading = 0;
-    private ContinuationType continuationType = ContinuationType.None;
-    private int continuationCount = 0;
-    private Row continuationOffRow;
-    private float roundTime;
-    
-    private string[] solutions;
-    private string[] validWords;
-    private bool submittingRow = false;
-    private Row submittedRow;
-    private bool ignoreDestroyUpdate = false;
-    public string word { get; private set; }
-    private char lastLetter;
-    public char LastLetter => lastLetter;
-    private Title titleReference;
-    public bool IsRegularGame = true; //=> titleReference != null && titleReference.IsRegularGame;
 
     [Header("UI")]
     public GameObject tryAgainButton;
     public GameObject newWordButton;
     public GameObject invalidWordText;
+    public bool isWordleSolved { get; private set; } = false;
+    
+    // Row info
+    private Row[] rows;
+    private int rowIndex;
+    private int columnIndex;
+    private int columnSkipIndex = -1;
+    private bool checkWord = true;
+    private float roundTime;
+    private bool ignoreDestroyUpdate = false;
 
+    // Row fading
+    private bool waitForFade = false;
+    private int rowsFading = 0;
+
+    // Row submitting
+    private bool submittingRow = false;
+    private Row submittedRow;
+
+    // Row continuations
+    private ContinuationType continuationType = ContinuationType.None;
+    private int continuationCount = 0;
+    private Row continuationOffRow;
+
+    // Valid words/solutions
+    private string[] solutions;
+    private string[] validWords;
+    private string[] validScrabbleWords;
+    
+    public string word { get; private set; }
+    private char lastLetter;
+    public char LastLetter => lastLetter;
+
+    public bool isScrabbleGame = false;
+    public bool IsRegularGame = true;
     public Row CreateRow(int length, Row.Direction direction = Row.Direction.Horizontal, Tile tileOff = null, int tileOffIndex = 0)
     {
         bool hasTileOff = tileOff != null;
@@ -115,314 +128,387 @@ public class Board : MonoBehaviour
             rowsFading--;
         };
     }
-
-    private void Awake()
+    
+    private ContinuationType GetContinuationType(Row row)
     {
-        titleReference = FindAnyObjectByType<Title>();
-    }
-
-    public void LoadData()
-    {
-        TextAsset textFile = Resources.Load("official_wordle_common") as TextAsset;
-        solutions = textFile.text.Split(SEPARATOR, System.StringSplitOptions.None);
-
-        textFile = Resources.Load("official_wordle_all") as TextAsset;
-        validWords = textFile.text.Split(SEPARATOR, System.StringSplitOptions.None);
-    }
-
-    public void GenerateRows() {
-        ClearBoard();  
-        rows = new Row[6];
-        for (int i = 0; i < 6; i++) {
-            Row row = CreateRow(5);
-            AddRow(row);
-            row.AddTiles();
+        if (HasWonWordle(row)) {
+            return ContinuationType.InitialWin;
+        } else if (continuationCount == 1) {
+            return ContinuationType.BuildOff;
         }
+        return ContinuationType.None;
+    }
+
+    private void Update()
+    {
+        // If waiting for fade, do not run rest of update until all rows are faded
+        if (waitForFade)
+        {
+            if (rowsFading != 0)
+            {
+                return;
+            }
+            waitForFade = false;
+        }
+        
+        if (!enabled || rows == null || rows.Length == 0) return;
+
+        // If submitting row, wait until row is revealed
+        if (submittingRow && submittedRow != null)
+        {
+            if (!submittedRow.IsRevealed) return;
+            
+            submittingRow = false;
+
+            // Get what type of continuation should occur after this
+            ContinuationType continueType = GetContinuationType(submittedRow);
+            if (continueType != ContinuationType.None)
+            {
+                // Fade rows that aren't winning row out
+                if (continueType == ContinuationType.InitialWin)
+                {
+                    AudioManager.instance.PlayWin();
+                }
+                else
+                {
+                    AudioManager.instance.PlayWrongGuess();
+                }
+                for (int i = 0; i < rows.Length; i++)
+                {
+                    if (i != rowIndex)
+                    {
+                        DisappearRow(i);
+                    }
+                }
+                waitForFade = true;
+                isScrabbleGame = true;
+                continuationOffRow = submittedRow;
+                continuationType = continueType;
+                continuationCount++;
+            }
+            else
+            {
+                // No continuation, see if we have reached the final row. If not, continue to next rows
+                if (rowIndex >= rows.Length)
+                {
+                    OnCompleted?.Invoke();
+                    glass.Hide();
+                }
+                else
+                {
+                    if (IsRegularGame)
+                    {
+                        AudioManager.instance.PlayWrongGuess();
+                    }
+                }
+                rowIndex++;
+                columnIndex = 0;
+                columnSkipIndex = -1;
+                if (rowIndex >= rows.Length) {
+                    if (IsRegularGame && continuationCount == 0)
+                    {
+                        AudioManager.instance.PlayLose();
+                    }
+                    OnCompleted?.Invoke();
+                    glass.Hide();
+                }
+                continuationCount = 0;
+            }
+            submittedRow = null;
+            return;
+        }
+
+        // Not submitting, see if we are continuing
+        if (continuationType != ContinuationType.None && continuationOffRow != null)
+        {
+            // Select which tile off of the last row should be the "locked" tile
+            int tileOffRowIndex = continuationOffRow.tileOffIndex;
+            while (tileOffRowIndex == continuationOffRow.tileOffIndex) {
+                tileOffRowIndex = Random.Range(0, continuationOffRow.tiles.Length - 1);
+            }
+
+            // Create a row off of the selected tile
+            Tile tileOff = continuationOffRow.tiles[tileOffRowIndex];
+            continuationOffRow.RemoveTile(tileOffRowIndex);
+            int continueLength = 5;
+            int tileOffIndex = 0;
+            Row continueRow = CreateRow(
+                continueLength,
+                continuationOffRow.direction == Row.Direction.Horizontal ? Row.Direction.Vertical : Row.Direction.Horizontal,
+                tileOff, tileOffIndex
+            );
+            AddRow(continueRow);
+            tileOff.transform.SetParent(continueRow.transform, true);
+            continueRow.AddTile(tileOff, tileOffIndex);
+            for (int j = 0; j < continueLength; j++)
+            {
+                if (j != tileOffIndex)
+                {
+                    continueRow.AddTile(continueRow.CreateTile(j), j);
+                }
+            }
+            rowIndex = rows.Length - 1;
+            columnIndex = tileOffIndex == 0 ? 1 : 0;
+            columnSkipIndex = tileOffIndex;
+            continuationOffRow = null;
+            checkWord = false;
+            continuationType = ContinuationType.None;
+        }
+
+        // Listen to inputs for words in rows
+        roundTime += Time.deltaTime;
+
+        if (roundTime >= Constants.GLASS_WARN_ROUND_TIME) {
+            glass.StartWarning();
+        }
+
+        Row currentRow = rows[rowIndex];
+        if (currentRow != null) {
+            if (Input.GetKeyDown(KeyCode.Backspace))
+            {
+                columnIndex = Mathf.Clamp(columnIndex - 1, 0, currentRow.tiles.Length);
+                if (columnIndex == columnSkipIndex)
+                {
+                    columnIndex = columnSkipIndex + (columnSkipIndex == 0 ? 1 : -1);
+                }
+                currentRow.tiles[columnIndex].SetLetter('\0');
+                currentRow.tiles[columnIndex].SetState(Tile.State.Empty);
+                invalidWordText.SetActive(false);
+            }
+            else if (columnIndex >= rows[rowIndex].tiles.Length)
+            {
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+                {
+                    Debug.Log("Enter pressed -> SubmitRow");
+                    SubmitRow(currentRow);
+                }
+            }
+            else
+            {
+                foreach (KeyCode key in SUPPORTED_KEYS)
+                {
+                    if (Input.GetKeyDown(key))
+                    {
+                        currentRow.tiles[columnIndex].SetLetter((char) key);
+                        currentRow.tiles[columnIndex].SetState(Tile.State.Occupied);
+                        columnIndex++;
+                        if (columnIndex == columnSkipIndex)
+                        {
+                            columnIndex = columnSkipIndex + 1;
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void LoadData()
+    {
+        if (solutions == null || solutions.Length == 0)
+        {
+            TextAsset common = Resources.Load("official_wordle_common") as TextAsset;
+            if (common != null)
+            {
+                solutions = common.text.Split(SEPARATOR, System.StringSplitOptions.None);
+            }
+        }
+
+        if (validWords == null || validWords.Length == 0)
+        {
+            TextAsset allWords = Resources.Load("official_wordle_all") as TextAsset;
+            if (allWords != null)
+            {
+                validWords = allWords.text.Split(SEPARATOR, System.StringSplitOptions.None);
+            }
+        }
+
+        if (validScrabbleWords == null || validScrabbleWords.Length == 0)
+        {
+            TextAsset scrabText = Resources.Load("dictionary") as TextAsset;
+            if (scrabText != null)
+            {
+                validScrabbleWords = scrabText.text
+                    .Split(SEPARATOR, System.StringSplitOptions.None)
+                    .Where(s => s.Length == 5)
+                    .Select(s => s.ToLower())
+                    .ToArray();
+            }
+        }
+    }
+
+    public void SetRandomWord()
+    {
+        if (solutions == null || solutions.Length == 0) { LoadData(); }
+        if (solutions == null || solutions.Length == 0)
+        {
+            Debug.LogWarning("No solutions found in Resources");
+            word = "random";
+        }
+        else
+        {
+            word = solutions[Random.Range(0, solutions.Length)].Trim().ToLower();
+        }
+        lastLetter = word[word.Length - 1];
+        name = word;
     }
 
     public void ClearBoard()
     {
         if (rows != null) {
             ignoreDestroyUpdate = true;
-            for (int i = 0; i < rows.Length; i++) {
-                print(rows[i]);
-                if (rows[i] != null) {
+            for (int i = 0; i < rows.Length; i++)
+            {
+                if (rows[i] != null)
+                {
                     rows[i].DestroyRow();
                 }
             }
-            if (IsRegularGame) {
-                AudioManager.instance.PlayButtonSound();
-            }
             ignoreDestroyUpdate = false;
             UpdateRows();
-
         }
+        // Reset rows
+        rows = new Row[0];
         rowIndex = 0;
         columnIndex = 0;
         columnSkipIndex = -1;
-        continuationCount = 0;
-        continuationOffRow = null;
-        continuationType = ContinuationType.None;
         checkWord = true;
+
+        // Reset continuation
+        continuationType = ContinuationType.None;
+        continuationOffRow = null;
+        continuationCount = 0;
         roundTime = 0f;
+
         glass.Show();
     }
 
-    public void SetRandomWord()
+    public void GenerateRows(int numRows = 6)
     {
-        if (solutions == null) {
-            LoadData();
+        ClearBoard();
+        rows = new Row[numRows];
+        for (int i = 0; i < numRows; i++)
+        {
+            Row row = CreateRow(5);
+            AddRow(row);
+            row.name = "Row " + i;
+            row.AddTiles();
         }
-        word = solutions[Random.Range(0, solutions.Length)];
-        word = word.ToLower().Trim();
-        lastLetter = word.Last();
-        name = word;
-    }
 
-    private void Update()
-    {
-        if (waitForFade) {
-            if (rowsFading == 0) {
-                waitForFade = false;
-            }
-        } else if (enabled && rows != null && rows.Length > 0) {
-            if (submittingRow && submittedRow != null) {
-                if (submittedRow.IsRevealed) {
-                    submittingRow = false;
-                    ContinuationType continueType = GetContinuationType(submittedRow);
-                    if (continueType != ContinuationType.None) {
-                        // Fade rows that aren't winning row out
-                        for (int i = 0; i < rows.Length; i++) {
-                            if (i != rowIndex) {
-                                DisappearRow(i);
-                            }
-                        }
-                        waitForFade = true;
-                        continuationOffRow = submittedRow;
-                        continuationType = continueType;
-                        continuationCount++;
-                        print("CONTINUE: " + rows.Length + " | " + rowIndex);
-                    } else {
-                        // No continuation, see if we have reached the final row. If not, continue to next rows
-                        print("NONE: " + rows.Length + " | " + rowIndex);
-                        if (rowIndex >= rows.Length)
-                        {
-                            OnCompleted?.Invoke();
-                            glass.Hide();
-                        }
-                        else
-                        {
-                            if (IsRegularGame)
-                            {
-                                AudioManager.instance.PlayWrongGuess();
-                            }
-                        }
-                        rowIndex++;
-                        columnIndex = 0;
-                        columnSkipIndex = -1;
-                        continuationCount = 0;
-                        if (rowIndex >= rows.Length) {
-                            if (IsRegularGame && continuationType == ContinuationType.None)
-                            {
-                                AudioManager.instance.PlayLose();
-                            }
-                            OnCompleted?.Invoke();
-                            glass.Hide();
-                        }
-                    }
-                    submittedRow = null;
-                }
-            } else {
-                roundTime += Time.deltaTime;
-                if (continuationType != ContinuationType.None && continuationOffRow != null)
-                {
-                    // Select which tile off of the last row should be the "locked" tile
-                    int tileOffRowIndex = continuationOffRow.tileOffIndex;
-                    while (tileOffRowIndex == continuationOffRow.tileOffIndex) {
-                        tileOffRowIndex = Random.Range(0, continuationOffRow.tiles.Length - 1);
-                    }
-
-                    // Create a row off of the selected tile
-                    Tile tileOff = continuationOffRow.tiles[tileOffRowIndex];
-                    continuationOffRow.RemoveTile(tileOffRowIndex);
-                    int continueLength = 5;
-                    int tileOffIndex = 0;
-                    Row continueRow = CreateRow(
-                        continueLength,
-                        continuationOffRow.direction == Row.Direction.Horizontal ? Row.Direction.Vertical : Row.Direction.Horizontal,
-                        tileOff, tileOffIndex
-                    );
-                    AddRow(continueRow);
-                    RectTransform tileOffTransform = tileOff.GetComponent<RectTransform>();
-                    print(tileOffTransform.anchoredPosition);
-                    tileOff.transform.SetParent(continueRow.transform, true);
-                    print(tileOffTransform.anchoredPosition);
-                    continueRow.AddTile(tileOff, tileOffIndex);
-                    print(tileOffTransform.anchoredPosition);
-                    for (int j = 0; j < continueLength; j++) {
-                        if (j != tileOffIndex) {
-                            continueRow.AddTile(continueRow.CreateTile(j), j);
-                        }
-                    }
-                    rowIndex = rows.Length - 1;
-                    columnIndex = tileOffIndex == 0 ? 1 : 0;
-                    columnSkipIndex = tileOffIndex;
-                    continuationOffRow = null;
-                    checkWord = false;
-                    continuationType = ContinuationType.None;
-                }
-                // print("ROW: " + rowIndex + " | " + rows.Length);
-                Row currentRow = rows[rowIndex];
-
-                if (currentRow != null) {
-                    if (Input.GetKeyDown(KeyCode.Backspace))
-                    {
-                        print(columnIndex);
-                        columnIndex = System.Math.Clamp(columnIndex - 1, 0, currentRow.tiles.Length);
-                        if (columnIndex == columnSkipIndex) {
-                            columnIndex = columnSkipIndex + (columnSkipIndex == 0 ? 1 : -1);
-                        }
-                        print(columnIndex);
-                        currentRow.tiles[columnIndex].SetLetter('\0');
-                        currentRow.tiles[columnIndex].SetState(Tile.State.Empty);
-                        invalidWordText.SetActive(false);
-                    }
-                    else if (columnIndex >= rows[rowIndex].tiles.Length)
-                    {
-                        if (Input.GetKeyDown(KeyCode.Return)) {
-                            SubmitRow(currentRow);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < SUPPORTED_KEYS.Length; i++)
-                        {
-                            if (Input.GetKeyDown(SUPPORTED_KEYS[i]))
-                            {
-                                currentRow.tiles[columnIndex].SetLetter((char)SUPPORTED_KEYS[i]);
-                                currentRow.tiles[columnIndex].SetState(Tile.State.Occupied);
-                                columnIndex++;
-                                if (columnIndex == columnSkipIndex) {
-                                    columnIndex = columnSkipIndex + 1;
-                                }
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (roundTime >= Constants.GLASS_WARN_ROUND_TIME) {
-                    glass.StartWarning();
-                }
-            }
-        }
+        rowIndex = 0;
+        columnIndex = 0;
+        columnSkipIndex = -1;
     }
 
     private void SubmitRow(Row row)
     {
         glass.Flip();
         roundTime = 0f;
-        if (!IsValidWord(row.word))
-        {
-            invalidWordText.SetActive(true);
-            return;
-        }
-
-        string remaining = word;
 
         Tile.State[] submittedStates = new Tile.State[row.tiles.Length];
-        print(row.word + " | " + word + " | " + remaining);
-        if (!checkWord)
+
+        if (isScrabbleGame)
         {
-            // If not checking word set all to inactive
-            for (int i = 0; i < row.tiles.Length; i++)
+            string enteredScrabbleWord = row.word.ToLower();
+            Debug.Log($"[Scrabble] Player typed: {enteredScrabbleWord}");
+
+            if (!IsValidScrabbleWord(enteredScrabbleWord))
             {
-                submittedStates[i] = Tile.State.Incorrect;
+                invalidWordText.SetActive(true);
+                return;
             }
-        }
-        else
-        {
-            // Check correct/incorrect letters first
+            
             for (int i = 0; i < row.tiles.Length; i++)
             {
-                Tile tile = row.tiles[i];
+                submittedStates[i] = Tile.State.ValidScrabbleWord;
+            }
 
-                if (tile.letter == word[i])
-                {
-                    submittedStates[i] = Tile.State.Correct;
+            lastLetter = enteredScrabbleWord[enteredScrabbleWord.Length - 1];
+        } else {
 
-                    remaining = remaining.Remove(i, 1);
-                    remaining = remaining.Insert(i, " ");
-                }
-                else if (!word.Contains(tile.letter))
+            if (!IsValidWord(row.word))
+            {
+                invalidWordText.SetActive(true);
+                Debug.Log("[Wordle] Invalid typed word: " + row.word);
+                return;
+            }
+
+            string solution = word;
+            string remaining = word;
+
+            if (!checkWord)
+            {
+                // If not checking word set all to inactive
+                for (int i = 0; i < row.tiles.Length; i++)
                 {
                     submittedStates[i] = Tile.State.Incorrect;
                 }
             }
-
-            // Check for wrong spots after
-            for (int i = 0; i < row.tiles.Length; i++)
+            else
             {
-                Tile tile = row.tiles[i];
-
-                if (submittedStates[i] != Tile.State.Correct && submittedStates[i] != Tile.State.Incorrect)
+                // Check correct/incorrect letters first
+                for (int i = 0; i < row.tiles.Length; i++)
                 {
-                    if (remaining.Contains(tile.letter))
-                    {
-                        submittedStates[i] = Tile.State.WrongSpot;
+                    Tile tile = row.tiles[i];
 
-                        int index = remaining.IndexOf(tile.letter);
-                        remaining = remaining.Remove(index, 1);
-                        remaining = remaining.Insert(index, " ");
+                    if (tile.letter == solution[i])
+                    {
+                        submittedStates[i] = Tile.State.Correct;
+                        remaining = remaining.Remove(i, 1).Insert(i, " ");
                     }
-                    else
+                    else if (!solution.Contains(tile.letter))
                     {
                         submittedStates[i] = Tile.State.Incorrect;
                     }
                 }
+
+                // Check for wrong spots after
+                for (int i = 0; i < row.tiles.Length; i++)
+                {
+                    Tile tile = row.tiles[i];
+
+                    if (submittedStates[i] != Tile.State.Correct && submittedStates[i] != Tile.State.Incorrect)
+                    {
+                        if (remaining.Contains(tile.letter))
+                        {
+                            submittedStates[i] = Tile.State.WrongSpot;
+                            int index = remaining.IndexOf(tile.letter);
+                            remaining = remaining.Remove(index, 1).Insert(index, " ");
+                        }
+                        else
+                        {
+                            submittedStates[i] = Tile.State.Incorrect;
+                        }
+                    }
+                }
             }
         }
-        print(rows.Length + " | " + rowIndex);
         row.Reveal(submittedStates);
         submittedRow = row;
         submittingRow = true;
-        print(rows.Length + " | " + rowIndex);
-    }
-
-    private bool IsValidWord(string word)
-    {
-        for (int i = 0; i < validWords.Length; i++)
-        {
-            if (string.Equals(word, validWords[i], System.StringComparison.OrdinalIgnoreCase)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private ContinuationType GetContinuationType(Row row)
-    {
-        if (HasWonWordle(row)) {
-            return ContinuationType.BuildOff;
-        } else if (continuationCount == 1) {
-            return ContinuationType.BuildBetween;
-        }
-        return ContinuationType.None;
     }
 
     private bool HasWonWordle(Row row)
     {
-        if (row.tiles.All(tile => tile.state == Tile.State.Correct))
-        {
-            isWordleSolved = true;
-            if (IsRegularGame)
-            {
-                AudioManager.instance.PlayWin();
-            }
-            return true;
-        }
-        return false;
+        bool allCorrect = row.tiles.All(t => t.state == Tile.State.Correct);
+        return allCorrect;
+    }
+
+    private bool IsValidWord(string typedWord)
+    {
+        if (validWords == null || validWords.Length == 0) return false;
+        return validWords.Any(v => string.Equals(v, typedWord, System.StringComparison.OrdinalIgnoreCase));
+    }
+
+    private bool IsValidScrabbleWord(string typedWord)
+    {
+        if (validScrabbleWords == null || validScrabbleWords.Length == 0) return false;
+        return validScrabbleWords.Contains(typedWord.ToLower());
+    }
+
+    public void SetLastLetter(char letter)
+    {
+        lastLetter = letter;
     }
 
     private void OnEnable()
@@ -435,10 +521,5 @@ public class Board : MonoBehaviour
     {
         tryAgainButton.SetActive(true);
         newWordButton.SetActive(true);
-    }
-
-    public void SetLastLetter(char letter)
-    {
-        lastLetter = letter;
     }
 }
