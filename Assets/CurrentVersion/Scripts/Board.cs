@@ -224,7 +224,7 @@ public class Board : MonoBehaviour
             // Select which tile off of the last row should be the "locked" tile
             int tileOffRowIndex = continuationOffRow.tileOffIndex;
             while (tileOffRowIndex == continuationOffRow.tileOffIndex) {
-                tileOffRowIndex = Random.Range(0, continuationOffRow.tiles.Length - 1);
+                tileOffRowIndex = Random.Range(0, continuationOffRow.tiles.Length);
             }
 
             // Create a row off of the selected tile
@@ -402,7 +402,6 @@ public class Board : MonoBehaviour
 
     private void SubmitRow(Row row)
     {
-        glass.Flip();
         roundTime = 0f;
 
         Tile.State[] submittedStates = new Tile.State[row.tiles.Length];
@@ -486,6 +485,7 @@ public class Board : MonoBehaviour
         row.Reveal(submittedStates);
         submittedRow = row;
         submittingRow = true;
+        glass.Flip();
     }
 
     private bool HasWonWordle(Row row)

@@ -219,5 +219,11 @@ namespace OriginalVersion {
             tryAgainButton.SetActive(true);
             newWordButton.SetActive(true);
         }
+
+        public void Quit() { 
+
+            Debug.Log("Quitting game...");
+            Application.Quit();
+        }
     }
 }
