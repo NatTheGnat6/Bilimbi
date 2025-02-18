@@ -75,7 +75,7 @@ public class ScrabbleBoard : MonoBehaviour
 
     private void Update()
     {
-        if (!wordleBoard.isWordleSolved) return;
+        // if (!wordleBoard.isWordleSolved) return;
         
         RowVariant currentRow = vrows[vrowIndex];
 

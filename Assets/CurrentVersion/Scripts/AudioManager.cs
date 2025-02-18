@@ -3,7 +3,7 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    public AudioSource wrongGuessSound;
+    public AudioSource guessSound;
     public AudioSource winSound;
     public AudioSource loseSound;
     public AudioSource buttonSound;
@@ -21,7 +21,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void PlayWrongGuess() => wrongGuessSound.Play();
+    public void PlayGuess() => guessSound.Play();
     public void PlayWin() => winSound.Play();
     public void PlayLose() => loseSound.Play();
     public void PlayButtonSound() => buttonSound.Play();

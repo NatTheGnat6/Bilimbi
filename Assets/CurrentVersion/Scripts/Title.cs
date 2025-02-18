@@ -35,7 +35,7 @@ public class Title : MonoBehaviour
             gameActive = true;
             startButtonText.text = "Continue";
             currentBoard = board;
-            board.isScrabbleGame = false;
+            board.SetAsRegularGame();
             board.GenerateRows();
             if (board.word == null || !maintainPreviousWord) {
                 board.SetRandomWord();

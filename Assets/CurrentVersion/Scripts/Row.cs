@@ -23,6 +23,7 @@ public class Row : MonoBehaviour
     private Tile.State[] revealStates;
     private bool hasRevealed;
     public bool IsRevealed { get => hasRevealed; }
+    private float revealTime;
     private bool destroyed;
     public bool HasDestroyed { get => destroyed; }
     private bool isFading;
@@ -95,7 +96,7 @@ public class Row : MonoBehaviour
     private void Update() {
         if (!hasRevealed && revealStates != null) {
             revealTimePassed += Time.deltaTime;
-            float submittingAlpha = revealTimePassed / Constants.SUBMIT_ROW_TIME;
+            float submittingAlpha = revealTimePassed / revealTime;
             if (submittingAlpha >= 1) {
                 hasRevealed = true;
                 for (int i = 0; i < revealStates.Length; i++) {
@@ -106,7 +107,7 @@ public class Row : MonoBehaviour
                     }
                 }
             } else {
-                float tileSubmitTime = Constants.SUBMIT_ROW_TIME / revealStates.Length;
+                float tileSubmitTime = revealTime / revealStates.Length;
                 for (int i = 0; i < revealStates.Length; i++) {
                     Tile tile = tiles[i];
                     if (tile != tileOff) {
@@ -153,8 +154,9 @@ public class Row : MonoBehaviour
         isFading = true;
     }
 
-    public void Reveal(Tile.State[] revealStates)
+    public void Reveal(Tile.State[] revealStates, float revealTime = Constants.ROW_REVEAL_TIME_INITIAL)
     {
+        this.revealTime = revealTime;
         this.revealStates = revealStates;
     }
 

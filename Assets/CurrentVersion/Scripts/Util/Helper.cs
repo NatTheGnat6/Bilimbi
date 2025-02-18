@@ -4,28 +4,47 @@ using UnityEngine.InputSystem.Interactions;
 
 public static class Helper {
     public delegate void Event();
-    public static float CubicEase(float alpha) {
+    public static float CubicEase(float alpha)
+    {
         return alpha * alpha * alpha;
     }
-    public static float CubicEaseOut(float alpha) {
+    public static float CubicEaseOut(float alpha)
+    {
         return 1 - (float)(Math.Pow(1 - alpha, 3));
     }
-    public static float Interpolate(float a, float b, float alpha) {
+    public static float Interpolate(float a, float b, float alpha)
+    {
         return a + ((b - a) * alpha);
     }
-    public static Color AlphaifyColor(Color color, float alpha) {
+    public static Color AlphaifyColor(Color color, float alpha)
+    {
         return new Color(color.r, color.g, color.b, alpha);
     }
-    public static Color ColorFromHex(String hex, float alpha) {
+    public static Color ColorFromHex(String hex, float alpha = 1)
+    {
         Color newColor;
-        if (ColorUtility.TryParseHtmlString("#" + hex, out newColor)) {
+        if (ColorUtility.TryParseHtmlString("#" + hex, out newColor))
+        {
             newColor.a = alpha;
             return newColor;
         }
         throw new NullReferenceException();
     }
-    public static Color ColorFromHex(String hex) => ColorFromHex(hex, 1);
-    public static float Approach(float at, float to, float speed) {
+    public static float Approach(float at, float to, float speed)
+    {
         return to;
+    }
+    public static string FormatTwoZeros(int number)
+    {
+        if (number < 0) {
+            number = 0;
+        }
+        return (number < 10 ? "0" : "") + number.ToString();
+    }
+    public static string FormatTimer(float time)
+    {
+        int minutes = (int) (time / 60);
+        int seconds = (int) Mathf.Ceil(time % 60);
+        return FormatTwoZeros(minutes) + ":" + FormatTwoZeros(seconds);
     }
 }

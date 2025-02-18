@@ -16,7 +16,8 @@ public class Tile : MonoBehaviour
         WrongSpot,
         Incorrect,
         Locked,
-        ValidScrabbleWord
+        ValidScrabbleWord,
+        InvalidScrabbleWord
     }
     public Pallette pallette;
     [System.Serializable]
@@ -45,7 +46,8 @@ public class Tile : MonoBehaviour
             {State.WrongSpot, pallette.wrongSpotState},
             {State.Incorrect, pallette.incorrectState},
             {State.Locked, pallette.lockedState},
-            {State.ValidScrabbleWord, pallette.correctState}
+            {State.ValidScrabbleWord, pallette.validScrabbleState},
+            {State.InvalidScrabbleWord, pallette.invalidScrabbleState}
         };
         SetState(State.Empty);
     }

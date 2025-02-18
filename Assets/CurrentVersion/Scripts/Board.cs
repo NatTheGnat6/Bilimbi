@@ -9,6 +9,8 @@ using Unity.VisualScripting;
 using System.Collections;
 using System.Net.Sockets;
 using System.Collections.Generic;
+using TMPro;
+using Mono.Cecil.Cil;
 
 
 [DefaultExecutionOrder(-1)]
@@ -37,10 +39,12 @@ public class Board : MonoBehaviour
     public GlassAnimation glass;
 
     [Header("UI")]
+    public Pallette pallette;
     public GameObject tryAgainButton;
     public GameObject newWordButton;
-    public GameObject invalidWordText;
-    public bool isWordleSolved { get; private set; } = false;
+    public GameObject invalidWordObject;
+    public GameObject timerObject;
+    private TMP_Text timerText;
     
     // Row info
     private Row[] rows;
@@ -49,6 +53,7 @@ public class Board : MonoBehaviour
     private int columnSkipIndex = -1;
     private bool checkWord = true;
     private float roundTime;
+    private float roundTimer;
     private bool ignoreDestroyUpdate = false;
 
     // Row fading
@@ -73,8 +78,11 @@ public class Board : MonoBehaviour
     private char lastLetter;
     public char LastLetter => lastLetter;
 
-    public bool isScrabbleGame = false;
-    public bool IsRegularGame = true;
+    private bool isScrabbleGame = false;
+    public void Awake()
+    {
+        timerText = timerObject.GetComponent<TMP_Text>();  
+    }
     public Row CreateRow(int length, Row.Direction direction = Row.Direction.Horizontal, Tile tileOff = null, int tileOffIndex = 0)
     {
         bool hasTileOff = tileOff != null;
@@ -133,7 +141,7 @@ public class Board : MonoBehaviour
     {
         if (HasWonWordle(row)) {
             return ContinuationType.InitialWin;
-        } else if (continuationCount == 1) {
+        } else if (continuationCount >= 1) {
             return ContinuationType.BuildOff;
         }
         return ContinuationType.None;
@@ -169,10 +177,6 @@ public class Board : MonoBehaviour
                 {
                     AudioManager.instance.PlayWin();
                 }
-                else
-                {
-                    AudioManager.instance.PlayWrongGuess();
-                }
                 for (int i = 0; i < rows.Length; i++)
                 {
                     if (i != rowIndex)
@@ -184,33 +188,17 @@ public class Board : MonoBehaviour
                 isScrabbleGame = true;
                 continuationOffRow = submittedRow;
                 continuationType = continueType;
+                roundTimer = Mathf.Max(Constants.ROUND_TIMER_INITIAL - continuationCount, Constants.ROUND_TIMER_MINIMUM);
                 continuationCount++;
             }
             else
             {
                 // No continuation, see if we have reached the final row. If not, continue to next rows
-                if (rowIndex >= rows.Length)
-                {
-                    OnCompleted?.Invoke();
-                    glass.Hide();
-                }
-                else
-                {
-                    if (IsRegularGame)
-                    {
-                        AudioManager.instance.PlayWrongGuess();
-                    }
-                }
                 rowIndex++;
                 columnIndex = 0;
                 columnSkipIndex = -1;
                 if (rowIndex >= rows.Length) {
-                    if (IsRegularGame && continuationCount == 0)
-                    {
-                        AudioManager.instance.PlayLose();
-                    }
-                    OnCompleted?.Invoke();
-                    glass.Hide();
+                    GameOver();
                 }
                 continuationCount = 0;
             }
@@ -253,15 +241,42 @@ public class Board : MonoBehaviour
             continuationOffRow = null;
             checkWord = false;
             continuationType = ContinuationType.None;
+            if (continuationCount > 0) {
+                Row lastRow = rows[rowIndex - 1];
+                for (int i = 0; i < lastRow.tiles.Length; i++)
+                {
+                    lastRow.tiles[i].SetState(Tile.State.ValidScrabbleWord);
+                }
+            }
+        }
+
+        // Determine round status based on time passed
+        roundTime += Time.deltaTime;
+        float roundAlpha = roundTime / roundTimer;
+        if (continuationCount > 0) {
+            if (roundAlpha >= 1) {
+                // Took too long after continuation, game over
+                GameOver();
+                return;
+            }
+            else if (roundAlpha >= Constants.ROUND_TIMER_ALERT_ALPHA)
+            {
+                timerText.color = pallette.timerAlertTextColor;
+            }
+            else if (roundAlpha >= Constants.ROUND_TIMER_WARNING_ALPHA)
+            {
+                glass.StartWarning();
+                timerText.color = pallette.timerWarningTextColor;
+            }
+            else
+            {
+                timerText.color = pallette.timerDefaultTextColor;
+            }
+            timerText.text = Helper.FormatTimer(roundTimer - roundTime);
+            timerObject.SetActive(true);
         }
 
         // Listen to inputs for words in rows
-        roundTime += Time.deltaTime;
-
-        if (roundTime >= Constants.GLASS_WARN_ROUND_TIME) {
-            glass.StartWarning();
-        }
-
         Row currentRow = rows[rowIndex];
         if (currentRow != null) {
             if (Input.GetKeyDown(KeyCode.Backspace))
@@ -273,7 +288,7 @@ public class Board : MonoBehaviour
                 }
                 currentRow.tiles[columnIndex].SetLetter('\0');
                 currentRow.tiles[columnIndex].SetState(Tile.State.Empty);
-                invalidWordText.SetActive(false);
+                invalidWordObject.SetActive(false);
             }
             else if (columnIndex >= rows[rowIndex].tiles.Length)
             {
@@ -379,7 +394,8 @@ public class Board : MonoBehaviour
         continuationOffRow = null;
         continuationCount = 0;
         roundTime = 0f;
-
+        roundTimer = Constants.ROUND_TIMER_INITIAL;
+        timerObject.SetActive(false);
         glass.Show();
     }
 
@@ -413,21 +429,26 @@ public class Board : MonoBehaviour
 
             if (!IsValidScrabbleWord(enteredScrabbleWord))
             {
-                invalidWordText.SetActive(true);
+                for (int i = 0; i < row.tiles.Length; i++)
+                {
+                    submittedStates[i] = Tile.State.InvalidScrabbleWord;
+                }
+                row.Reveal(submittedStates);
+                GameOver();
                 return;
-            }
-            
-            for (int i = 0; i < row.tiles.Length; i++)
-            {
-                submittedStates[i] = Tile.State.ValidScrabbleWord;
-            }
+            } else {
+                for (int i = 0; i < row.tiles.Length; i++)
+                {
+                    submittedStates[i] = Tile.State.ValidScrabbleWord;
+                }
 
-            lastLetter = enteredScrabbleWord[enteredScrabbleWord.Length - 1];
+                lastLetter = enteredScrabbleWord[enteredScrabbleWord.Length - 1];
+            }
         } else {
 
             if (!IsValidWord(row.word))
             {
-                invalidWordText.SetActive(true);
+                invalidWordObject.SetActive(true);
                 Debug.Log("[Wordle] Invalid typed word: " + row.word);
                 return;
             }
@@ -483,6 +504,9 @@ public class Board : MonoBehaviour
             }
         }
         row.Reveal(submittedStates);
+        AudioManager.instance.PlayGuess();
+        timerText.text = Helper.FormatTimer(0);
+        timerText.color = pallette.timerResettingTextColor;
         submittedRow = row;
         submittingRow = true;
         glass.Flip();
@@ -509,6 +533,19 @@ public class Board : MonoBehaviour
     public void SetLastLetter(char letter)
     {
         lastLetter = letter;
+    }
+
+    public void SetAsRegularGame()
+    {
+        isScrabbleGame = false;
+    }
+
+    private void GameOver()
+    {
+        AudioManager.instance.PlayLose();
+        OnCompleted?.Invoke();
+        glass.Hide();
+        timerObject.SetActive(false);
     }
 
     private void OnEnable()
