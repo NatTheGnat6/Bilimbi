@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
@@ -21,7 +18,7 @@ public class Board : MonoBehaviour
         KeyCode.G, KeyCode.H, KeyCode.I, KeyCode.J, KeyCode.K, KeyCode.L,
         KeyCode.M, KeyCode.N, KeyCode.O, KeyCode.P, KeyCode.Q, KeyCode.R,
         KeyCode.S, KeyCode.T, KeyCode.U, KeyCode.V, KeyCode.W, KeyCode.X,
-        KeyCode.Y, KeyCode.Z, 
+        KeyCode.Y, KeyCode.Z
     };
 
     private static readonly string[] SEPARATOR = new string[] { "\r\n", "\r", "\n" };
@@ -516,7 +513,7 @@ public class Board : MonoBehaviour
         glass.Flip();
     }
 
-    private bool HasWonWordle(Row row)
+    private bool IsValidScrabbleWord(string typedWord)
     {
         bool allCorrect = row.tiles.All(t => t.state == Tile.State.Correct);
         return allCorrect;
