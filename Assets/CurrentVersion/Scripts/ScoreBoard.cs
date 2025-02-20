@@ -68,6 +68,7 @@ public class ScoreBoard : MonoBehaviour
                 }
             }
             newItems[order] = items[i];
+            newItems[order].SetPlace(order + 1);
         }
         return newItems;
     }
@@ -90,8 +91,7 @@ public class ScoreBoard : MonoBehaviour
 
     private void SaveScore()
     {
-        print("HELLO! " + savingName + ", " + savingScore + ", " + savingWord);
-
+        CreateScoreItem(savingName, savingScore, savingWord);
         savingName = "";
         savingScore = -1;
         savingWord = "";

@@ -25,4 +25,8 @@ public class ScoreItem : MonoBehaviour
     {
         wordText.text = word;
     }
+    public void SetPlace(int place)
+    {
+        placeText.text = "#" + place.ToString();
+    }
 }

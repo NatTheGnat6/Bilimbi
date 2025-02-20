@@ -13,5 +13,5 @@ public static class Constants {
     public const float ROUND_TIMER_MINIMUM = 2f;
     public const string SCORE_DISPLAY_PREFIX = "Your Score: ";
     public const string SCORE_PLACEHOLDER_TEXT = "Insert Name Here";
-    public const int SCORE_NAME_MAX_LENGTH = 18;
+    public const int SCORE_NAME_MAX_LENGTH = 12;
 }
