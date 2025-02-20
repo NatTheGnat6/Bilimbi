@@ -12,12 +12,14 @@ public class Title : MonoBehaviour
         Game,
         Credits,
         VersionNotes,
+        Scores
     }
 
     public Canvas titleScreen;
     public Canvas gameScreen;
     public Canvas creditsScreen;
     public Canvas versionNotesScreen;
+    public Canvas scoresScreen;
     public Component homeButton;
     public TMP_Text startButtonText;
     public Board initialBoard;
@@ -100,11 +102,17 @@ public class Title : MonoBehaviour
         SwitchScreens(ScreenType.VersionNotes);
     }
 
+    public void ToScoresScreen() {
+        AudioManager.instance.PlayButtonSound();
+        SwitchScreens(ScreenType.Scores);
+    }
+
     private void SwitchScreens(ScreenType type) {
         titleScreen.gameObject.SetActive(type == ScreenType.Title);
         gameScreen.gameObject.SetActive(type == ScreenType.Game);
         creditsScreen.gameObject.SetActive(type == ScreenType.Credits);
         versionNotesScreen.gameObject.SetActive(type == ScreenType.VersionNotes);
+        scoresScreen.gameObject.SetActive(type == ScreenType.Scores);
         homeButton.gameObject.SetActive(type != ScreenType.Title);
         hasSwitchedScreens = true;
     }

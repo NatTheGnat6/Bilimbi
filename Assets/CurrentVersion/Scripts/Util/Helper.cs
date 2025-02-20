@@ -4,6 +4,7 @@ using UnityEngine.InputSystem.Interactions;
 
 public static class Helper {
     public delegate void Event();
+    public delegate void Event<T>(T param);
     public static float CubicEase(float alpha)
     {
         return alpha * alpha * alpha;

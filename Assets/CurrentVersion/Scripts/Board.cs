@@ -37,6 +37,7 @@ public class Board : MonoBehaviour
     public Row rowPrefab;
     public Tile tilePrefab;
     public GlassAnimation glass;
+    public ScoreBoard scoreBoard;
 
     [Header("UI")]
     public Pallette pallette;
@@ -68,6 +69,7 @@ public class Board : MonoBehaviour
     private ContinuationType continuationType = ContinuationType.None;
     private int continuationCount = 0;
     private Row continuationOffRow;
+    private bool hideRetryButtons;
 
     // Valid words/solutions
     private string[] solutions;
@@ -79,6 +81,7 @@ public class Board : MonoBehaviour
     public char LastLetter => lastLetter;
 
     private bool isScrabbleGame = false;
+
     public void Awake()
     {
         timerText = timerObject.GetComponent<TMP_Text>();  
@@ -397,6 +400,7 @@ public class Board : MonoBehaviour
         roundTimer = Constants.ROUND_TIMER_INITIAL;
         timerObject.SetActive(false);
         glass.Show();
+        scoreBoard.CloseSavePrompt();
     }
 
     public void GenerateRows(int numRows = 6)
@@ -543,20 +547,35 @@ public class Board : MonoBehaviour
     private void GameOver()
     {
         AudioManager.instance.PlayLose();
-        OnCompleted?.Invoke();
         glass.Hide();
         timerObject.SetActive(false);
+        if (continuationCount > 0)
+        {
+            hideRetryButtons = true;
+            scoreBoard.PromptScoreSave(30, word);
+            Helper.Event showRetry = null;
+            showRetry = () => {
+                hideRetryButtons = false;
+                ToggleRetryButtons(true);
+                scoreBoard.OnPromptFinished -= showRetry;
+            };
+            scoreBoard.OnPromptFinished += showRetry;
+        }
+        OnCompleted?.Invoke();
     }
 
-    private void OnEnable()
+    private void ToggleRetryButtons(bool active)
     {
-        tryAgainButton.SetActive(false);
-        newWordButton.SetActive(false);
+        tryAgainButton.SetActive(active);
+        newWordButton.SetActive(active); 
     }
+
+    private void OnEnable() => ToggleRetryButtons(false);
 
     private void OnDisable()
     {
-        tryAgainButton.SetActive(true);
-        newWordButton.SetActive(true);
+        if (!hideRetryButtons) {
+            ToggleRetryButtons(true);
+        }
     }
 }
