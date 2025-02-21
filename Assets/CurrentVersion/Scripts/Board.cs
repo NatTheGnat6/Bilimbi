@@ -10,8 +10,6 @@ using System.Collections;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using TMPro;
-using Mono.Cecil.Cil;
-
 
 [DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
@@ -556,7 +554,7 @@ public class Board : MonoBehaviour
 
         StartBonusScoring();
 
-        string[,] finalScore = new string[1, 2] { { word, (continuationCount * 2).ToString() } };
+        string[,] finalScore = new string[1, 2] { { word, (continuationCount * 10).ToString() } };
 
         if (continuationCount > 0)
         {
