@@ -551,6 +551,10 @@ public class Board : MonoBehaviour
         glass.Hide();
         gameOverImage.StartEffect();
         timerObject.SetActive(false);
+
+        StartBonusScoring();
+        string[,] finalScore = GetFinalScoreMatrix();
+
         if (continuationCount > 0)
         {
             hideRetryButtons = true;
@@ -565,6 +569,88 @@ public class Board : MonoBehaviour
         }
         OnCompleted?.Invoke();
     }
+
+    private int score = 0;
+    private bool bonusActive = false;
+
+    private void StartBonusScoring()
+    {
+        if (!bonusActive)
+        {
+            bonusActive = true;
+            StartCoroutine(BonusScoreCoroutine());
+        }
+    }
+
+    private IEnumerator BonusScoreCoroutine()
+    {
+        while (roundTime < roundTimer)
+        {
+            int correctLetters = 0;
+
+            for (int i = 0; i < rows.Length; i++)
+            {
+                correctLetters += GetCorrectLetterCount(rows[i]);
+            }
+
+            score += correctLetters * 10;
+            Debug.Log($"Bonus Score: {score} (Correct Letters: {correctLetters})");
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        bonusActive = false;
+        Debug.Log("Bonus scoring ended.");
+    }
+
+    private int GetWordleAttempts()
+    {
+        for (int i = 0; i < rows.Length; i++)
+        {
+            if (rows[i] != null && HasWonWordle(rows[i]))
+            {
+                return i + 1;
+            }
+        }
+        return rows.Length;
+    }
+
+    private int GetWordleScore(int attempts)
+    {
+        switch (attempts)
+        {
+            case 1: return 500;
+            case 2: return 400;
+            case 3: return 300;
+            case 4: return 200;
+            case 5: return 100;
+            case 6: return 50;
+            default: return 0;
+        }
+    }
+
+
+    private string[,] GetFinalScoreMatrix()
+    {
+        int attempts = GetWordleAttempts();
+        int wordleScore = GetWordleScore(attempts);
+        int totalScore = wordleScore + score;
+
+        string[,] scoreMatrix = new string[1, 2];
+        scoreMatrix[0, 0] = word;
+        scoreMatrix[0, 1] = totalScore.ToString();
+
+        Debug.Log($"Final Score Matrix: [{scoreMatrix[0,0]}, {scoreMatrix[0,1]}]");
+
+        return scoreMatrix;
+    }
+
+
+    private int GetCorrectLetterCount(Row row)
+    {
+        return row.tiles.Count(tile => tile.state == Tile.State.Correct);
+    }
+
 
     private void ToggleRetryButtons(bool active)
     {
