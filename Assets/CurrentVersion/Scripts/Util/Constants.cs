@@ -9,9 +9,12 @@ public static class Constants {
     public const float ROW_MOVE_SPEED = 1f;
     public const float ROUND_TIMER_WARNING_ALPHA = 0.5f;
     public const float ROUND_TIMER_ALERT_ALPHA = 0.8f;
-    public const float ROUND_TIMER_INITIAL = 16f;
+    public const float ROUND_TIMER_INITIAL = 20f;
     public const float ROUND_TIMER_MINIMUM = 2f;
     public const string SCORE_DISPLAY_PREFIX = "Your Score: ";
     public const string SCORE_PLACEHOLDER_TEXT = "Insert Name Here";
     public const int SCORE_NAME_MAX_LENGTH = 12;
+    public const float GAME_OVER_REACH_ALPHA = 0.6f;
+    public const float GAME_OVER_RETURN_ALPHA = 0.8f;
+    public const float GAME_OVER_EFFECT_TIME = 3f;
 }

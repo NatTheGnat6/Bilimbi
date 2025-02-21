@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using TMPro;
 using Mono.Cecil.Cil;
 using UnityEngine.InputSystem.OnScreen;
+using JetBrains.Annotations;
 
 
 [DefaultExecutionOrder(-1)]
@@ -24,6 +25,7 @@ public class ScoreBoard : MonoBehaviour
     public TMP_Text promptScoreText;
     public ScoreInputField promptField;
     public ScoreItem scoreItemPrefab;
+
     // Saving prompts
     private string savingName;
     private int savingScore;
@@ -59,27 +61,35 @@ public class ScoreBoard : MonoBehaviour
         ScoreItem[] newItems = new ScoreItem[items.Length];
         for (int i = 0; i < newItems.Length; i++)
         {
+            ScoreItem adjustItem = items[i];
+            int adjustScore = adjustItem.GetScore();
             int order = 0;
             for (int j = 0; j < newItems.Length; j++)
             {
-                if (j != i && items[j].GetScore() < items[i].GetScore())
+                ScoreItem againstItem = items[j];
+                int againstScore = againstItem.GetScore();
+                if (!adjustItem.Equals(againstItem) && (
+                    adjustScore < againstScore ||  (adjustScore == againstScore && i > j)
+                ))
                 {
                     order++;
                 }
             }
-            newItems[order] = items[i];
-            newItems[order].SetPlace(order + 1);
+            newItems[order] = adjustItem;
+            adjustItem.SetPlace(order + 1);
         }
         return newItems;
     }
 
-    private void CreateScoreItem(string name, int score, string word)
+    public void CreateScoreItem(string name, int score, string word)
     {
-        int totalScoreItems = scoreItems.Length + 1;
+        int totalScoreItems = scoreItems != null ? scoreItems.Length + 1 : 1;
         ScoreItem[] newScoreItems = new ScoreItem[totalScoreItems];
-        for (int i = 0; i < scoreItems.Length; i++)
-        {
-            newScoreItems[i] = scoreItems[i];
+        if (scoreItems != null) {
+            for (int i = 0; i < scoreItems.Length; i++)
+            {
+                newScoreItems[i] = scoreItems[i];
+            }
         }
         ScoreItem scoreItem = Instantiate(scoreItemPrefab);
         scoreItem.SetName(name);
@@ -87,11 +97,20 @@ public class ScoreBoard : MonoBehaviour
         scoreItem.SetWord(word);
         newScoreItems[totalScoreItems - 1] = scoreItem;
         scoreItems = OrderByScore(newScoreItems);
+        for (int i = 0; i < scoreItems.Length; i++)
+        {
+            ScoreItem item = scoreItems[i];
+            item.transform.SetParent(null);
+            item.transform.SetParent(transform);
+        }
+        scoreItem.transform.localScale = new Vector3(1, 1, 1);
     }
 
     private void SaveScore()
     {
-        CreateScoreItem(savingName, savingScore, savingWord);
+        if (savingScore > 0) {
+            CreateScoreItem(savingName, savingScore, savingWord);
+        }
         savingName = "";
         savingScore = -1;
         savingWord = "";

@@ -46,6 +46,7 @@ public class Board : MonoBehaviour
     public GameObject invalidWordObject;
     public GameObject timerObject;
     private TMP_Text timerText;
+    public GameOverImage gameOverImage;
     
     // Row info
     private Row[] rows;
@@ -84,7 +85,7 @@ public class Board : MonoBehaviour
 
     public void Awake()
     {
-        timerText = timerObject.GetComponent<TMP_Text>();  
+        timerText = timerObject.GetComponent<TMP_Text>();
     }
     public Row CreateRow(int length, Row.Direction direction = Row.Direction.Horizontal, Tile tileOff = null, int tileOffIndex = 0)
     {
@@ -548,11 +549,12 @@ public class Board : MonoBehaviour
     {
         AudioManager.instance.PlayLose();
         glass.Hide();
+        gameOverImage.StartEffect();
         timerObject.SetActive(false);
         if (continuationCount > 0)
         {
             hideRetryButtons = true;
-            scoreBoard.PromptScoreSave(30, word);
+            scoreBoard.PromptScoreSave(continuationCount * 2, word);
             Helper.Event showRetry = null;
             showRetry = () => {
                 hideRetryButtons = false;

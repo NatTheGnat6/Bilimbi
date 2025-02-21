@@ -17,6 +17,10 @@ public static class Helper {
     {
         return a + ((b - a) * alpha);
     }
+    public static Vector2 Interpolate(Vector2 a, Vector2 b, float alpha)
+    {
+        return a + ((b - a) * alpha);
+    }
     public static Color AlphaifyColor(Color color, float alpha)
     {
         return new Color(color.r, color.g, color.b, alpha);

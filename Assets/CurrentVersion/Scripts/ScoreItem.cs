@@ -10,20 +10,19 @@ public class ScoreItem : MonoBehaviour
     private int score;
     public void SetName(string name)
     {
+        this.name = name;
         nameText.text = name;
     }
+    public string GetName() => name;
     public void SetScore(int score)
     {
         this.score = score;
         scoreText.text = score.ToString();
     }
-    public int GetScore()
-    {
-        return score;
-    }
+    public int GetScore() => score;
     public void SetWord(string word)
     {
-        wordText.text = word;
+        wordText.text = word.ToUpper();
     }
     public void SetPlace(int place)
     {
