@@ -82,6 +82,8 @@ public class Board : MonoBehaviour
     public char LastLetter => lastLetter;
 
     private bool isScrabbleGame = false;
+    private int score = 0;
+    private bool bonusActive = false;
 
     public void Awake()
     {
@@ -553,12 +555,14 @@ public class Board : MonoBehaviour
         timerObject.SetActive(false);
 
         StartBonusScoring();
-        string[,] finalScore = GetFinalScoreMatrix();
+
+        string[,] finalScore = new string[1, 2] { { word, (continuationCount * 2).ToString() } };
 
         if (continuationCount > 0)
         {
             hideRetryButtons = true;
-            scoreBoard.PromptScoreSave(continuationCount * 2, word);
+            scoreBoard.PromptScoreSave(finalScore);
+            
             Helper.Event showRetry = null;
             showRetry = () => {
                 hideRetryButtons = false;
@@ -567,11 +571,9 @@ public class Board : MonoBehaviour
             };
             scoreBoard.OnPromptFinished += showRetry;
         }
+
         OnCompleted?.Invoke();
     }
-
-    private int score = 0;
-    private bool bonusActive = false;
 
     private void StartBonusScoring()
     {

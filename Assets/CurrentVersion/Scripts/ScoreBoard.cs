@@ -32,11 +32,11 @@ public class ScoreBoard : MonoBehaviour
     private string savingWord;
     private ScoreItem[] scoreItems;
 
-    public void PromptScoreSave(int score, string word)
+    public void PromptScoreSave(string[,] scoreMatrix)
     {
-        savingScore = score;
-        savingWord = word;
-        promptScoreText.text = Constants.SCORE_DISPLAY_PREFIX + score.ToString();
+        savingScore = int.Parse(scoreMatrix[0, 1]);
+        savingWord = scoreMatrix[0, 0];
+        promptScoreText.text = Constants.SCORE_DISPLAY_PREFIX + savingScore.ToString();
         promptField.TextReset();
         promptField.OnSubmitted += SubmitSavePrompt;
         promptCanvas.SetActive(true);
