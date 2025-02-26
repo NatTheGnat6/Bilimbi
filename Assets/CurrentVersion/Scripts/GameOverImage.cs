@@ -38,7 +38,6 @@ public class GameOverImage : MonoBehaviour
     }
     public void StartEffect()
     {
-        print("Doing effect!");
         gameObject.SetActive(true);
         effectTimePassed = 0f;
         showingEffect = true;

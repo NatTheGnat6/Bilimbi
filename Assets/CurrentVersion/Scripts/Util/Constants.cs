@@ -6,7 +6,8 @@ public static class Constants {
     public const string CURRENT_SCENE_PATH = "Wordle";
     public const string NEW_WORDLE_SCENE_PATH = "WordleNew";
     public const float ROW_REVEAL_TIME_INITIAL = 1f;
-    public const float ROW_MOVE_SPEED = 1f;
+    public const float ROW_MOVE_SPEED = 1000f;
+    public const float BOARD_MOVE_SPEED = 400f;
     public const float ROUND_TIMER_WARNING_ALPHA = 0.5f;
     public const float ROUND_TIMER_ALERT_ALPHA = 0.8f;
     public const float ROUND_TIMER_INITIAL = 20f;

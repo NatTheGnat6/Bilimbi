@@ -31,10 +31,13 @@ public class Row : MonoBehaviour
     private float fadeTimePassed = 0.0f;
     public int length;
     public Direction direction;
-    public Tile tileOff;
-    public int tileOffIndex = -1;
+    private Tile tileOff;
+    public int tileOffIndex { get; private set; } = -1;
+    private Vector3 tileOffPosition;
     public Tile[] tiles { get; private set; }
     public Tile tilePrefab;
+    private Vector3 targetPosition;
+    private Vector3 offset;
     
     public string word
     {
@@ -94,6 +97,8 @@ public class Row : MonoBehaviour
     }
 
     private void Update() {
+        // rectTransform.anchoredPosition = 
+        //     Helper.Approach(rectTransform.anchoredPosition, targetPosition, Time.deltaTime * Constants.ROW_MOVE_SPEED);
         if (!hasRevealed && revealStates != null) {
             revealTimePassed += Time.deltaTime;
             float submittingAlpha = revealTimePassed / revealTime;
@@ -160,28 +165,53 @@ public class Row : MonoBehaviour
         this.revealStates = revealStates;
     }
 
+    public void SetTileOff(Tile tileOff, int tileOffIndex)
+    {
+        tileOff.SetState(Tile.State.Locked);
+        this.tileOff = tileOff;
+        this.tileOffIndex = tileOffIndex;
+        RectTransform tileOffTransform = tileOff.GetComponent<RectTransform>();
+        tileOffPosition = new Vector3(
+            direction == Direction.Vertical ? tileOffTransform.anchoredPosition.x : 0,
+            direction == Direction.Horizontal ? tileOffTransform.anchoredPosition.y : 0,
+            0
+        );
+    }
+
+    public void SetOffset(Vector3 offset)
+    {
+        this.offset = offset;
+    }
+
     public void SetOrder(int order)
     {
-        if (rectTransform == null) {
+        if (rectTransform == null)
+        {
             rectTransform = GetComponent<RectTransform>();
         }
-        if (tileOff != null) {
-            RectTransform tileOffTransform = tileOff.GetComponent<RectTransform>();
-            RectTransform tileOffRowTransform = tileOff.row.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = new Vector3(
-                direction == Direction.Horizontal ? order * tileOffRowTransform.anchoredPosition.x :
-                    tileOffTransform.anchoredPosition.x,
-                    //tileOff.row != this ? tileOffTransform.anchoredPosition.x : rectTransform.anchoredPosition.x,
-                direction == Direction.Vertical ? order * tileOffRowTransform.anchoredPosition.y : 
-                    tileOffTransform.anchoredPosition.y,
-                    //tileOff.row != this ? tileOffTransform.anchoredPosition.y : rectTransform.anchoredPosition.y,
-                0
-            );
-        } else {
-            targetHeight = order * -(rectTransform.sizeDelta.y + Constants.TILE_PADDING);
-            rectTransform.anchoredPosition = new Vector3(
-                0, Helper.Approach(rectTransform.anchoredPosition.y, targetHeight, Time.deltaTime * Constants.ROW_MOVE_SPEED), 0
+        if (tileOff != null)
+        {
+            targetPosition = order == 0 ? Vector3.zero : tileOffPosition;
+        }
+        else
+        {
+            targetPosition = new Vector3(
+                0, order * -(rectTransform.sizeDelta.y + Constants.TILE_PADDING), 0
             );
         }
+        targetPosition += offset;
+        rectTransform.anchoredPosition = targetPosition;
+    }
+
+    public Vector2 GetTileOffset(int zeroOffsetTileCount)
+    {
+        int offsetDifference = tiles.Length - zeroOffsetTileCount;
+        RectTransform firstTileTransform = tiles[0].GetComponent<RectTransform>();
+        float offset = (firstTileTransform.sizeDelta.x + Constants.TILE_PADDING)/2;
+        float totalTileOffset = offset * offsetDifference;
+        return new Vector2(
+            direction == Direction.Horizontal ? -totalTileOffset : 0,
+            direction == Direction.Vertical ? totalTileOffset : 0
+        );
     }
 }

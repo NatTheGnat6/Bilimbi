@@ -11,7 +11,11 @@ public static class Helper {
     }
     public static float CubicEaseOut(float alpha)
     {
-        return 1 - (float)(Math.Pow(1 - alpha, 3));
+        return 1 - (float)Math.Pow(1 - alpha, 3);
+    }
+    public static int GetRandom(int minimum, int maximum)
+    {
+        return UnityEngine.Random.Range(minimum, maximum);
     }
     public static float Interpolate(float a, float b, float alpha)
     {
@@ -37,7 +41,21 @@ public static class Helper {
     }
     public static float Approach(float at, float to, float speed)
     {
-        return to;
+        if (at > to)
+        {
+            return Mathf.Max(at - speed, to);
+        }
+        return Mathf.Min(at + speed, to);
+    }
+    public static Vector2 Approach(Vector2 at, Vector2 to, float speed)
+    {
+        Vector2 displacement = to - at;
+        if (displacement.magnitude <= speed)
+        {
+            return to;
+        }
+        displacement.Normalize();
+        return new Vector2(at.x + (displacement.x * speed), at.y + (displacement.y * speed));
     }
     public static string FormatTwoZeros(int number)
     {

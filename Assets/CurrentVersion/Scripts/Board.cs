@@ -10,6 +10,7 @@ using System.Collections;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using TMPro;
+using System;
 
 [DefaultExecutionOrder(-1)]
 public class Board : MonoBehaviour
@@ -42,6 +43,7 @@ public class Board : MonoBehaviour
     public GameObject tryAgainButton;
     public GameObject newWordButton;
     public GameObject invalidWordObject;
+    public GameObject repeatWordObject;
     public GameObject timerObject;
     private TMP_Text timerText;
     public GameOverImage gameOverImage;
@@ -69,6 +71,7 @@ public class Board : MonoBehaviour
     private int continuationCount = 0;
     private Row continuationOffRow;
     private bool hideRetryButtons;
+    private Vector3 rowOffset;
 
     // Valid words/solutions
     private string[] solutions;
@@ -81,6 +84,10 @@ public class Board : MonoBehaviour
 
     private bool isScrabbleGame = false;
     private int score = 0;
+    private int defautLength = 5;
+    private int minScrabbleLength = 4;
+    private int maxScrabbleLength = 6;
+    private List<String> usedWords;
     private bool bonusActive = false;
 
     public void Awake()
@@ -94,9 +101,7 @@ public class Board : MonoBehaviour
         row.length = length;
         row.direction = direction;
         if (hasTileOff) {
-            tileOff.SetState(Tile.State.Locked);
-            row.tileOff = tileOff;
-            row.tileOffIndex = tileOffIndex;
+            row.SetTileOff(tileOff, tileOffIndex);
         }
         return row;
     }
@@ -108,6 +113,7 @@ public class Board : MonoBehaviour
         for (int i = 0; i < rows.Length; i++) {
             Row row = rows[i];
             if (row != null && !row.HasDestroyed) {
+                row.SetOffset(rowOffset);
                 row.SetOrder(rowIndex);
                 newRows.Add(row);
                 row.name = rowIndex.ToString();
@@ -115,6 +121,7 @@ public class Board : MonoBehaviour
             }
         }
         if (addRow != null) {
+            addRow.SetOffset(rowOffset);
             addRow.SetOrder(rowIndex);
             newRows.Add(addRow);
             addRow.name = rowIndex.ToString();
@@ -216,13 +223,14 @@ public class Board : MonoBehaviour
             // Select which tile off of the last row should be the "locked" tile
             int tileOffRowIndex = continuationOffRow.tileOffIndex;
             while (tileOffRowIndex == continuationOffRow.tileOffIndex) {
-                tileOffRowIndex = Random.Range(0, continuationOffRow.tiles.Length);
+                
+                tileOffRowIndex = Helper.GetRandom(0, continuationOffRow.tiles.Length);
             }
 
             // Create a row off of the selected tile
             Tile tileOff = continuationOffRow.tiles[tileOffRowIndex];
             continuationOffRow.RemoveTile(tileOffRowIndex);
-            int continueLength = 5;
+            int continueLength = Helper.GetRandom(minScrabbleLength, maxScrabbleLength + 1);
             int tileOffIndex = 0;
             Row continueRow = CreateRow(
                 continueLength,
@@ -239,6 +247,17 @@ public class Board : MonoBehaviour
                     continueRow.AddTile(continueRow.CreateTile(j), j);
                 }
             }
+            Vector3 continueRowOffset = continueRow.GetTileOffset(defautLength);
+            if (continueRow.direction == Row.Direction.Horizontal)
+            {
+                rowOffset.x = continueRowOffset.x;
+            }
+            else
+            {
+                rowOffset.y = continueRowOffset.y;
+            }
+            rowOffset.z = 0;
+            UpdateRows();
             rowIndex = rows.Length - 1;
             columnIndex = tileOffIndex == 0 ? 1 : 0;
             columnSkipIndex = tileOffIndex;
@@ -349,7 +368,7 @@ public class Board : MonoBehaviour
             {
                 validScrabbleWords = scrabText.text
                     .Split(SEPARATOR, System.StringSplitOptions.None)
-                    .Where(s => s.Length == 5)
+                    .Where(s => s.Length >= minScrabbleLength && s.Length <= maxScrabbleLength)
                     .Select(s => s.ToLower())
                     .ToArray();
             }
@@ -366,7 +385,7 @@ public class Board : MonoBehaviour
         }
         else
         {
-            word = solutions[Random.Range(0, solutions.Length)].Trim().ToLower();
+            word = solutions[Helper.GetRandom(0, solutions.Length)].Trim().ToLower();
         }
         lastLetter = word[word.Length - 1];
         name = word;
@@ -399,9 +418,14 @@ public class Board : MonoBehaviour
         continuationCount = 0;
         roundTime = 0f;
         roundTimer = Constants.ROUND_TIMER_INITIAL;
+        usedWords = new List<String>();
+        rowOffset = Vector3.zero;
+
+        // Reset visuals
         timerObject.SetActive(false);
         glass.Show();
         scoreBoard.CloseSavePrompt();
+        repeatWordObject.SetActive(false);
     }
 
     public void GenerateRows(int numRows = 6)
@@ -410,7 +434,7 @@ public class Board : MonoBehaviour
         rows = new Row[numRows];
         for (int i = 0; i < numRows; i++)
         {
-            Row row = CreateRow(5);
+            Row row = CreateRow(defautLength);
             AddRow(row);
             row.name = "Row " + i;
             row.AddTiles();
@@ -431,23 +455,30 @@ public class Board : MonoBehaviour
         {
             string enteredScrabbleWord = row.word.ToLower();
             Debug.Log($"[Scrabble] Player typed: {enteredScrabbleWord}");
+            bool isInvalid = !IsValidScrabbleWord(enteredScrabbleWord);
+            bool isRepeat = !isInvalid && usedWords.Contains(enteredScrabbleWord);
 
-            if (!IsValidScrabbleWord(enteredScrabbleWord))
+            if (isInvalid || isRepeat)
             {
                 for (int i = 0; i < row.tiles.Length; i++)
                 {
                     submittedStates[i] = Tile.State.InvalidScrabbleWord;
                 }
+                invalidWordObject.SetActive(isInvalid);
+                repeatWordObject.SetActive(isRepeat);
                 row.Reveal(submittedStates);
                 GameOver();
                 return;
-            } else {
+            }
+            else
+            {
                 for (int i = 0; i < row.tiles.Length; i++)
                 {
                     submittedStates[i] = Tile.State.ValidScrabbleWord;
                 }
 
                 lastLetter = enteredScrabbleWord[enteredScrabbleWord.Length - 1];
+                usedWords.Add(enteredScrabbleWord);
             }
         } else {
 
@@ -506,6 +537,7 @@ public class Board : MonoBehaviour
                         }
                     }
                 }
+                usedWords.Add(solution);
             }
         }
         row.Reveal(submittedStates);
@@ -564,6 +596,8 @@ public class Board : MonoBehaviour
             Helper.Event showRetry = null;
             showRetry = () => {
                 hideRetryButtons = false;
+                invalidWordObject.SetActive(false);
+                repeatWordObject.SetActive(false);
                 ToggleRetryButtons(true);
                 scoreBoard.OnPromptFinished -= showRetry;
             };
@@ -644,7 +678,6 @@ public class Board : MonoBehaviour
 
         return scoreMatrix;
     }
-
 
     private int GetCorrectLetterCount(Row row)
     {
