@@ -78,7 +78,7 @@ public class Board : MonoBehaviour
     public string word { get; private set; }
     private char lastLetter;
     public char LastLetter => lastLetter;
-
+    private List<string> submittedWords = new List<string>();
     private bool isScrabbleGame = false;
     private int score = 0;
     private bool bonusActive = false;
@@ -401,6 +401,7 @@ public class Board : MonoBehaviour
         roundTimer = Constants.ROUND_TIMER_INITIAL;
         timerObject.SetActive(false);
         glass.Show();
+        submittedWords.Clear();
         scoreBoard.CloseSavePrompt();
     }
 
@@ -448,6 +449,7 @@ public class Board : MonoBehaviour
                 }
 
                 lastLetter = enteredScrabbleWord[enteredScrabbleWord.Length - 1];
+                submittedWords.Add(enteredScrabbleWord);
             }
         } else {
 
@@ -559,7 +561,7 @@ public class Board : MonoBehaviour
         if (continuationCount > 0)
         {
             hideRetryButtons = true;
-            scoreBoard.PromptScoreSave(finalScore);
+            scoreBoard.PromptScoreSave(finalScore, submittedWords);
             
             Helper.Event showRetry = null;
             showRetry = () => {
@@ -649,6 +651,11 @@ public class Board : MonoBehaviour
     private int GetCorrectLetterCount(Row row)
     {
         return row.tiles.Count(tile => tile.state == Tile.State.Correct);
+    }
+
+    public List<string> GetEnteredScrabbleWords()
+    {
+        return submittedWords;
     }
 
 
