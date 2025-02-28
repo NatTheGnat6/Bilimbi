@@ -8274,33 +8274,46 @@ MonoBehaviour:
     in the boxes and make words!
 
 
+    v0.0.5.0s5
+
+    - Made bonus words randomly
+    have 4-6 slots instead of 5
+
+    - Added fail condition if user repeats word
+
+    -
+    Added game icon
+
+    - Added best words for your score in score screen
+
+
 
     v0.0.4.0s4
 
-    - Added decreasing timer
-    for infinite word combos
+    -
+    Added decreasing timer for infinite word combos
 
     - Added score counter
 
-    - Added high score screen
-    to track your best scores
+    -
+    Added high score screen to track your best scores
 
-    - Added game over image effect
+    - Added game over image
+    effect
 
 
 
     v0.0.3.0s3
 
+    - Added quit button
+
+    - Added second spot for
+    extra word
+
+    - Made words after correct wordle match to the scrabble dictionary
+
     -
-    Added quit button
-
-    - Added second spot for extra word
-
-    - Made words after
-    correct wordle match to the scrabble dictionary
-
-    - Made word tiles do a reveal
-    animation
+    Made word tiles do a reveal animation
 
     - Fixed hourglass animation
 
@@ -8308,23 +8321,23 @@ MonoBehaviour:
 
     v0.0.2.0s2
 
-    - Added hourglass
-    to tell you when time is ticking down
+    -
+    Added hourglass to tell you when time is ticking down
 
-    - Added sound effects for buttons,
-    submitting words,
+    - Added sound effects
+    for buttons, submitting words,
 
     winning and losing
 
-    - Added splash screens for game
-    title, WPI, and Zigurous
+    - Added splash screens
+    for game title, WPI, and Zigurous
 
 
 
     v0.0.1.0s1
 
-    - Added vertical word typing
-    off of final word
+    - Added vertical word
+    typing off of final word
 
     - Added title screen
 
