@@ -560,7 +560,7 @@ public class Board : MonoBehaviour
         if (continuationCount > 0)
         {
             hideRetryButtons = true;
-            scoreBoard.PromptScoreSave(finalScore);
+            scoreBoard.PromptScoreSave(finalScore, submittedWords);
             
             Helper.Event showRetry = null;
             showRetry = () => {

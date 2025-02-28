@@ -13,6 +13,7 @@ public class ScoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public TMP_Text tooltipText;
     public Board board;
     private int score;
+    private List<string> scrabbleWords;
     public void SetName(string name)
     {
         this.name = name;
@@ -33,17 +34,21 @@ public class ScoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     {
         placeText.text = "#" + place.ToString();
     }
+    public void SetScrabbleWords(List<string> words)
+    {
+        scrabbleWords = new List<string>(words);
+    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (tooltip != null && board != null)
+        if (tooltip != null) // remove '&& board != null'
         {
             tooltip.SetActive(true);
 
-            List<string> submittedWords = board.GetEnteredScrabbleWords();
-            if (submittedWords.Count > 0)
+            // Use the local scrabbleWords field, not board.GetEnteredScrabbleWords()
+            if (scrabbleWords != null && scrabbleWords.Count > 0)
             {
-                tooltipText.text = string.Join("\n", submittedWords);
+                tooltipText.text = string.Join("\n", scrabbleWords);
             }
             else
             {
