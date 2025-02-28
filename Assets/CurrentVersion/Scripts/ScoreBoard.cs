@@ -30,20 +30,20 @@ public class ScoreBoard : MonoBehaviour
         promptField.OnSubmitted += SubmitSavePrompt;
         promptCanvas.SetActive(true);
 
-        savingScrabbleWords = null;
+        savingScrabbleWords = new List<string>();
     }
 
     public void PromptScoreSave(string[,] scoreMatrix, List<string> scrabbleWords)
     {
         savingScore = int.Parse(scoreMatrix[0, 1]);
         savingWord = scoreMatrix[0, 0];
+        
         promptScoreText.text = Constants.SCORE_DISPLAY_PREFIX + savingScore.ToString();
         promptField.TextReset();
         promptField.OnSubmitted += SubmitSavePrompt;
         promptCanvas.SetActive(true);
 
-
-        savingScrabbleWords = scrabbleWords;
+        savingScrabbleWords = new List<string>(scrabbleWords);
     }
 
 
@@ -150,18 +150,19 @@ public class ScoreBoard : MonoBehaviour
         {
             if (savingScrabbleWords != null && savingScrabbleWords.Count > 0)
             {
-                CreateScoreItem(savingName, savingScore, savingWord, savingScrabbleWords);
+                CreateScoreItem(savingName, savingScore, savingWord, new List<string>(savingScrabbleWords));
             }
-
             else
             {
                 CreateScoreItem(savingName, savingScore, savingWord);
             }
+            savingScrabbleWords = new List<string>();
         }
+
         savingName = "";
         savingScore = -1;
         savingWord = "";
-
-        savingScrabbleWords = null;
+        savingScrabbleWords = new List<string>();
     }
+
 }

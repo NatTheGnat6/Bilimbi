@@ -36,19 +36,45 @@ public class ScoreItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     }
     public void SetScrabbleWords(List<string> words)
     {
-        scrabbleWords = new List<string>(words);
+        scrabbleWords = new List<string>();
+        if (words != null && words.Count > 0)
+        {
+            scrabbleWords.AddRange(words);
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (tooltip != null) // remove '&& board != null'
+        if (tooltip != null)
         {
             tooltip.SetActive(true);
 
-            // Use the local scrabbleWords field, not board.GetEnteredScrabbleWords()
+            RectTransform tooltipRect = tooltip.GetComponent<RectTransform>();
+            Vector2 localPoint;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                tooltipRect.parent as RectTransform,
+                Input.mousePosition,
+                null,
+                out localPoint
+            );
+            tooltipRect.anchoredPosition = localPoint + new Vector2(50, -20);
+
             if (scrabbleWords != null && scrabbleWords.Count > 0)
             {
-                tooltipText.text = string.Join("\n", scrabbleWords);
+                var colorCodedList = new List<string>();
+                foreach (string word in scrabbleWords)
+                {
+                    if (word.Length >= 5)
+                    {
+                        colorCodedList.Add($"<color=#1E9B37>{word}</color>");
+                    }
+                    else
+                    {
+                        colorCodedList.Add($"<color=white>{word}</color>");
+                    }
+                }
+
+                tooltipText.text = string.Join("\n", colorCodedList);
             }
             else
             {

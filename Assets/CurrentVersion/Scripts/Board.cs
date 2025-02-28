@@ -401,6 +401,7 @@ public class Board : MonoBehaviour
         roundTimer = Constants.ROUND_TIMER_INITIAL;
         timerObject.SetActive(false);
         glass.Show();
+        submittedWords.Clear();
         scoreBoard.CloseSavePrompt();
     }
 
