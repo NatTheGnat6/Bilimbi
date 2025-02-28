@@ -698,7 +698,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Project Bilimbi
+  m_text: Wordle Frenzy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c91f346a2dcd1d4ea60df09cb171fa0, type: 2}
   m_sharedMaterial: {fileID: -6968012083706816933, guid: 9c91f346a2dcd1d4ea60df09cb171fa0, type: 2}

@@ -5908,7 +5908,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Project Bilimbi
+  m_text: Wordle Frenzy
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 9c91f346a2dcd1d4ea60df09cb171fa0, type: 2}
   m_sharedMaterial: {fileID: -6968012083706816933, guid: 9c91f346a2dcd1d4ea60df09cb171fa0, type: 2}
@@ -8286,65 +8286,68 @@ MonoBehaviour:
 
     - Added best words for your score in score screen
 
+    -
+    Named game!
+
 
 
     v0.0.4.0s4
 
-    -
-    Added decreasing timer for infinite word combos
+    - Added decreasing timer for infinite word
+    combos
 
     - Added score counter
 
-    -
-    Added high score screen to track your best scores
+    - Added high score screen to track your
+    best scores
 
-    - Added game over image
-    effect
+    - Added game over image effect
 
 
 
     v0.0.3.0s3
 
-    - Added quit button
+    - Added
+    quit button
 
-    - Added second spot for
-    extra word
+    - Added second spot for extra word
 
-    - Made words after correct wordle match to the scrabble dictionary
+    - Made words after correct
+    wordle match to the scrabble dictionary
+
+    - Made word tiles do a reveal animation
 
     -
-    Made word tiles do a reveal animation
-
-    - Fixed hourglass animation
+    Fixed hourglass animation
 
 
 
     v0.0.2.0s2
 
-    -
-    Added hourglass to tell you when time is ticking down
+    - Added hourglass to tell you
+    when time is ticking down
 
-    - Added sound effects
-    for buttons, submitting words,
+    - Added sound effects for buttons, submitting
+    words,
 
     winning and losing
 
-    - Added splash screens
-    for game title, WPI, and Zigurous
+    - Added splash screens for game title, WPI,
+    and Zigurous
 
 
 
     v0.0.1.0s1
 
-    - Added vertical word
-    typing off of final word
+    - Added vertical word typing off of final
+    word
 
     - Added title screen
 
     - Added credits screen
 
-    -
-    Added version notes screen
+    - Added version
+    notes screen
 
     - Added navigation to original version'
   m_isRightToLeft: 0
